@@ -12,3 +12,10 @@ export const AddItems = styled.View`
   align-items: center;
   justify-content: center;
 `;
+
+export const Header = styled.View`
+  min-width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 10%;
+`;
