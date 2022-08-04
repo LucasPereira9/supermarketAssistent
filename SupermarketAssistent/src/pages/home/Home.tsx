@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   View,
@@ -7,41 +7,31 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
+  TextInput,
 } from 'react-native';
 import {Container, AddItems, Header} from './styles';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Square from 'react-native-vector-icons/Feather';
+import Modal from 'react-native-modal';
+import NewItemodal from '../../components/modal';
 
 export default function Home() {
-  const [teste, setTeste] = React.useState(false);
-  const items = [
-    {
-      checked: Boolean(teste),
-      item: 'Item 1',
-      valor: '2,35',
-      quantidade: '1',
-    },
-    {
-      checked: Boolean(teste),
-      item: 'Item 2',
-      valor: '4,66',
-      quantidade: '2',
-    },
-    {
-      checked: Boolean(teste),
-      item: 'Item 3',
-      valor: '66,80',
-      quantidade: '3',
-    },
-  ];
+  const [item, setItem] = useState('');
+  const [value, setValue] = useState('');
+  const [amount, setAmount] = useState('');
+  const [itensContainer, setItensContainer] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
 
   function handleMoreItens() {
-    items.push({
-      checked: Boolean(teste),
-      item: 'Item 4',
-      valor: '4,66',
-      quantidade: '2',
-    });
+    const NewItem = {
+      item: item,
+      value: value,
+      amount: amount,
+    };
+    setItensContainer([...itensContainer, NewItem]);
+    setValue('');
+    setItem('');
+    setAmount('');
   }
   return (
     <Container>
@@ -50,33 +40,38 @@ export default function Home() {
         <Text style={styles.headerText}>LISTA DE COMPRAS</Text>
       </Header>
       <ScrollView>
-        {items.map((item, index) => (
+        {itensContainer.map((item, index) => (
           <View key={index} style={styles.ListView}>
-            <TouchableOpacity
-              onPress={() => {
-                setTeste(!teste);
-              }}>
-              <Square
-                name={item.checked ? 'check-square' : 'square'}
-                size={20}
-                color="#000000"
-              />
+            <TouchableOpacity onPress={() => {}}>
+              <Square name={'square'} size={20} color="#000000" />
             </TouchableOpacity>
             <Text>{item.item}</Text>
-            <Text>R$ {item.valor}</Text>
-            <Text>{item.quantidade}</Text>
+            <Text>R$ {item.value}</Text>
+            <Text>{item.amount}</Text>
           </View>
         ))}
       </ScrollView>
       <AddItems>
         <TouchableOpacity
           onPress={() => {
-            handleMoreItens();
-            console.log(items);
+            setOpenModal(true);
           }}>
           <Icon name="pluscircle" size={60} color="#fff" />
         </TouchableOpacity>
       </AddItems>
+      <NewItemodal
+        isVisible={openModal}
+        close={() => {
+          handleMoreItens();
+          setOpenModal(false);
+        }}
+        item={item}
+        setItem={(string: any) => setItem(string)}
+        value={value}
+        setValue={(string: any) => setValue(string)}
+        amount={amount}
+        setAmount={(string: any) => setAmount(string)}
+      />
     </Container>
   );
 }
@@ -93,5 +88,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#868484',
     minWidth: '90%',
+  },
+  modalContainer: {
+    justifyContent: 'center',
+    backgroundColor: '#ffffff',
   },
 });
