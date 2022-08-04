@@ -24,18 +24,17 @@ export function Card({data, onPress}: Props) {
     const response = await getItem();
     const previousItens = response ? JSON.parse(response) : [];
     const data = previousItens.filter((item: CardProps) => item.id !== id);
-    console.log('daata', data);
     setFinished(!finished);
   }
   return (
-    <View style={{minWidth: '100%'}}>
+    <View style={{minWidth: '100%', flexDirection: 'row'}}>
       <TouchableOpacity onPress={() => handleFinished(data.id)}>
         <Icon name={finished ? 'left' : 'down'} size={60} color="#cc0000" />
       </TouchableOpacity>
-      <View>
-        <Text style={{color: '#000'}}>{data.unity}</Text>
-        <Text style={{color: '#000'}}>{data.value}</Text>
-        <Text style={{color: '#000'}}>{data.amount}</Text>
+      <View style={{flexDirection: 'row'}}>
+        <Text style={{color: '#000', padding: 10}}>{data.unity}</Text>
+        <Text style={{color: '#000', padding: 10}}>{data.amount}</Text>
+        <Text style={{color: '#000', padding: 10}}>R$ {data.value}</Text>
       </View>
 
       <TouchableOpacity onPress={onPress}>

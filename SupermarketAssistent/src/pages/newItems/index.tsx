@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   Alert,
   StyleSheet,
@@ -13,11 +13,15 @@ import uuid from 'uuid/v4';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {Container} from './styles';
 import HeaderForm from '../../components/cardHeader';
+import {useFocusEffect} from '@react-navigation/native';
+import NumericInput from 'react-native-numeric-input';
+import CurrencyInput from 'react-native-currency-input';
+import {TextInputMask} from 'react-native-masked-text';
 
 export default function NewItems() {
   const [unity, setUnity] = useState('');
-  const [value, setValue] = useState('');
-  const [amount, setAmount] = useState('');
+  const [value, setValue] = useState('0');
+  const [amount, setAmount] = useState<number>(1);
 
   const {getItem, setItem} = useAsyncStorage('@supermarketAssistent');
 
@@ -40,11 +44,8 @@ export default function NewItems() {
       console.log(error);
       Alert.alert('deu ruim');
     }
-
-    setUnity('');
-    setValue('');
-    setAmount('');
   }
+
   return (
     <Container>
       <HeaderForm />
@@ -71,12 +72,13 @@ export default function NewItems() {
           placeholderTextColor={'#000000'}
           keyboardType="numeric"
         />
-        <TextInput
-          style={styles.Input}
-          placeholder="QUANTIDADE"
-          onChangeText={setAmount}
-          placeholderTextColor={'#000000'}
-          keyboardType="numeric"
+        <NumericInput
+          value={amount}
+          onChange={event => setAmount(event)}
+          minValue={1}
+          valueType="real"
+          type="plus-minus"
+          rounded
         />
         <TouchableOpacity
           onPress={() => {

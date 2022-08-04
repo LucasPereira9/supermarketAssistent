@@ -9,7 +9,7 @@ export default function HeaderForm() {
   return (
     <View>
       <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Icon name="chevron-left" size={32} color="#1967FB" />
+        <Icon name="left" size={32} color="#1967FB" />
       </TouchableOpacity>
 
       <Text>Cadastro</Text>

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Text,
   StatusBar,
@@ -17,6 +17,7 @@ import {useFocusEffect} from '@react-navigation/native';
 
 export default function Home() {
   const navigation = useNavigation();
+  const [total, setTotal] = useState(0);
 
   const [itensContainer, setItensContainer] = useState<CardProps[]>([]);
 
@@ -39,15 +40,39 @@ export default function Home() {
     const data = previousItens.filter((item: CardProps) => item.id !== id);
     setItem(JSON.stringify(data));
     setItensContainer(data);
+    handleTotal();
   }
-  async function handleTotal(total: string) {
-    const response = await getItem();
-    const previousItens = response ? JSON.parse(response) : [];
-    const data = previousItens.filter(
-      (item: CardProps) => item.value === total,
-    );
-    console.log(data);
+  async function handleTotal() {
+    try {
+      const response = await getItem();
+      const previousItens = response ? JSON.parse(response) : [];
+      const data = previousItens.map((item: CardProps) => item.value);
+      var number = 0;
+      for (var i = 0; i < data.length; i++) {
+        number = number += parseFloat(data[i]);
+        const teste = number.toString();
+        const result = teste.substr(0, 8);
+
+        const BiggerResult = result.concat('0');
+        const LowerResult = result.concat('.00');
+        console.log('length', result.length);
+        if (result.length === 3 || result.length > 3) {
+          setTotal(BiggerResult);
+        } else {
+          setTotal(LowerResult);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      handleTotal();
+    }, []),
+  );
+
   useFocusEffect(
     useCallback(() => {
       handleAddItem();
@@ -72,7 +97,7 @@ export default function Home() {
       <AddItems>
         <Text>VALOR TOTAL:</Text>
         <TouchableOpacity onPress={() => navigation.navigate('NewItems')}>
-          <Text>TURURU</Text>
+          <Text>R$ {total}</Text>
         </TouchableOpacity>
       </AddItems>
     </Container>
