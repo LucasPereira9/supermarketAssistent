@@ -1,6 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
+
 import React from 'react';
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -8,6 +10,8 @@ import {
   View,
 } from 'react-native';
 import Modal from 'react-native-modal';
+import uuid from 'uuid/v4';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function NewItemodal({
   isVisible,
@@ -26,8 +30,32 @@ export default function NewItemodal({
   item: string;
   setItem: any;
   isVisible: any;
-  close: any;
+  close: Function;
 }) {
+  async function handleMoreItens() {
+    try {
+      const id = uuid();
+      const NewItem = {
+        id,
+        item,
+        value,
+        amount,
+      };
+      const response = await AsyncStorage.getItem('@supermarketAssistent');
+      const previousItens = response ? JSON.parse(response) : [];
+      const data = [...previousItens, NewItem];
+
+      await AsyncStorage.setItem('@supermarketAssistent', JSON.stringify(data));
+      Alert.alert('Sucesso', 'Item adicionado com sucesso');
+    } catch (error) {
+      console.log(error);
+      Alert.alert('deu ruim');
+    }
+
+    setValue('');
+    setItem('');
+    setAmount('');
+  }
   return (
     <Modal
       style={{justifyContent: 'center', alignItems: 'center'}}
@@ -78,8 +106,12 @@ export default function NewItemodal({
             keyboardType="numeric"
             autoCapitalize="none"
           />
-          <TouchableOpacity onPress={close}>
-            <Text>FECHAR</Text>
+          <TouchableOpacity
+            onPress={() => {
+              close();
+              handleMoreItens();
+            }}>
+            <Text>CADASTRAR</Text>
           </TouchableOpacity>
         </View>
       }

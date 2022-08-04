@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -7,13 +7,12 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  TextInput,
 } from 'react-native';
 import {Container, AddItems, Header} from './styles';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Square from 'react-native-vector-icons/Feather';
-import Modal from 'react-native-modal';
 import NewItemodal from '../../components/modal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home() {
   const [item, setItem] = useState('');
@@ -22,17 +21,20 @@ export default function Home() {
   const [itensContainer, setItensContainer] = useState([]);
   const [openModal, setOpenModal] = useState(false);
 
-  function handleMoreItens() {
-    const NewItem = {
-      item: item,
-      value: value,
-      amount: amount,
-    };
-    setItensContainer([...itensContainer, NewItem]);
-    setValue('');
-    setItem('');
-    setAmount('');
+  async function handleAddItem() {
+    try {
+      const response = await AsyncStorage.getItem('@supermarketAssistent');
+
+      const data = response ? JSON.parse(response) : [];
+      setItensContainer(data);
+    } catch (error) {
+      console.log(error);
+    }
   }
+  useEffect(() => {
+    handleAddItem();
+  }, []);
+
   return (
     <Container>
       <StatusBar barStyle="dark-content" backgroundColor={'#ffffff'} />
@@ -45,7 +47,9 @@ export default function Home() {
             <TouchableOpacity onPress={() => {}}>
               <Square name={'square'} size={20} color="#000000" />
             </TouchableOpacity>
-            <Text>{item.item}</Text>
+            <Text style={{minWidth: '10%', alignSelf: 'center'}}>
+              {item.item}
+            </Text>
             <Text>R$ {item.value}</Text>
             <Text>{item.amount}</Text>
           </View>
@@ -62,7 +66,7 @@ export default function Home() {
       <NewItemodal
         isVisible={openModal}
         close={() => {
-          handleMoreItens();
+          handleAddItem();
           setOpenModal(false);
         }}
         item={item}
