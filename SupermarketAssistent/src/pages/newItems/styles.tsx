@@ -2,6 +2,6 @@ import styled from 'styled-components/native';
 
 export const Container = styled.View`
   flex: 1;
-  background: #ff0000;
+  background: #ffffff;
   align-items: center;
 `;

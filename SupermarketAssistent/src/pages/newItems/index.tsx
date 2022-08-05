@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Alert,
   StyleSheet,
@@ -13,15 +13,13 @@ import uuid from 'uuid/v4';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {Container} from './styles';
 import HeaderForm from '../../components/cardHeader';
-import {useFocusEffect} from '@react-navigation/native';
 import NumericInput from 'react-native-numeric-input';
-import CurrencyInput from 'react-native-currency-input';
-import {TextInputMask} from 'react-native-masked-text';
+import MaskInput from 'react-native-mask-input';
 
 export default function NewItems() {
   const [unity, setUnity] = useState('');
-  const [value, setValue] = useState('0');
-  const [amount, setAmount] = useState<number>(1);
+  const [value, setValue] = useState('');
+  const [amount, setAmount] = useState(1);
 
   const {getItem, setItem} = useAsyncStorage('@supermarketAssistent');
 
@@ -65,12 +63,12 @@ export default function NewItems() {
           placeholderTextColor={'#00000050'}
           keyboardType="default"
         />
-        <TextInput
-          style={styles.Input}
-          placeholder="VALOR"
-          onChangeText={setValue}
-          placeholderTextColor={'#000000'}
-          keyboardType="numeric"
+        <MaskInput
+          value={value}
+          onChangeText={masked => {
+            setValue(masked);
+          }}
+          mask={[/\d/, /\d/, '.', /\d/, /\d/]}
         />
         <NumericInput
           value={amount}

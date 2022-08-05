@@ -50,17 +50,21 @@ export default function Home() {
       var number = 0;
       for (var i = 0; i < data.length; i++) {
         number = number += parseFloat(data[i]);
-        const teste = number.toString();
-        const result = teste.substr(0, 8);
+        const transform = number.toString();
+        const result = transform.substr(0, 6);
+        const decimalResult = transform.substr(0, 5);
 
-        const BiggerResult = result.concat('0');
-        const LowerResult = result.concat('.00');
-        console.log('length', result.length);
-        if (result.length === 3 || result.length > 3) {
-          setTotal(BiggerResult);
-        } else {
-          setTotal(LowerResult);
+        if (transform.length < 4) {
+          setTotal(Number(decimalResult));
         }
+        if (transform.length > 4) {
+          setTotal(Number(result));
+        }
+
+        console.log('number: ', number);
+        console.log('transf: ', transform);
+        console.log('result; ', result);
+        console.log('result222; ', decimalResult);
       }
     } catch (error) {
       console.error(error);
