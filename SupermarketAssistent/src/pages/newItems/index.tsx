@@ -18,8 +18,13 @@ import MaskInput from 'react-native-mask-input';
 
 export default function NewItems() {
   const [unity, setUnity] = useState('');
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState<any>('');
   const [amount, setAmount] = useState(1);
+
+  const [selectedUnity, setSelectedUnity] = useState(true);
+  const [selectedMultiply, setSelectedMultiply] = useState(false);
+  const [changePrice, setChangePrice] = useState(false);
+  const empty = unity === '' || value === '';
 
   const {getItem, setItem} = useAsyncStorage('@supermarketAssistent');
 
@@ -62,17 +67,14 @@ export default function NewItems() {
         />
         <MaskInput
           style={styles.Input}
+          placeholder="R$ 00.00"
           placeholderTextColor={'#00000083'}
           value={value}
           keyboardType="numeric"
           onChangeText={masked => {
             setValue(masked);
           }}
-          mask={
-            value.length > 3
-              ? [/\d/, /\d/, '.', /\d/, /\d/]
-              : [/\d/, '.', /\d/, /\d/]
-          }
+          mask={[/\d/, /\d/, '.', /\d/, /\d/]}
         />
         <NumericInput
           value={amount}
@@ -87,12 +89,41 @@ export default function NewItems() {
           rightButtonBackgroundColor="#FDCC4E"
           leftButtonBackgroundColor="#FDCC4E"
         />
-        <Text style={{textAlign: 'center', padding: 16, color: '#fff'}}>
-          valor total multiplicado {'\n'} {result}
-        </Text>
+        <View style={{flexDirection: 'row', padding: 30}}>
+          <TouchableOpacity
+            onPress={() => {
+              setSelectedMultiply(false);
+              setSelectedUnity(true);
+            }}
+            style={{
+              backgroundColor: selectedUnity ? '#FDCC4E' : '#040fa7',
+              borderRadius: 14,
+            }}>
+            <Text style={{textAlign: 'center', padding: 16, color: '#fff'}}>
+              Valor total unitário {'\n'} R$ {changePrice ? null : value}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: selectedMultiply ? '#FDCC4E' : '#040fa7',
+              borderRadius: 14,
+            }}
+            onPress={() => {
+              setSelectedUnity(false);
+              setSelectedMultiply(true);
+              setValue(result);
+              setChangePrice(true);
+            }}>
+            <Text style={{textAlign: 'center', padding: 10, color: '#fff'}}>
+              valor total multiplicado {'\n'} R$ {changePrice ? value : result}
+            </Text>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity
-          style={styles.button}
+          style={[styles.button, {backgroundColor: empty ? '#ccc' : '#FDCC4E'}]}
           onPress={() => {
+            setValue(result);
+            console.log(value);
             handleMoreItens();
           }}>
           <Text style={{color: '#000000'}}>ADICIONAR</Text>
@@ -104,18 +135,19 @@ export default function NewItems() {
 
 const styles = StyleSheet.create({
   Container: {
-    top: '14%',
+    top: '12%',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#040fa7',
-    height: '45%',
+    height: '55%',
+    minWidth: '90%',
     width: '80%',
     borderRadius: 10,
   },
   Input: {
     color: '#000',
     width: '60%',
-    height: '16%',
+    height: '13%',
     marginBottom: 10,
     backgroundColor: '#FDCC4E',
     borderRadius: 16,
@@ -127,6 +159,5 @@ const styles = StyleSheet.create({
     width: '60%',
     height: '14%',
     borderRadius: 8,
-    backgroundColor: '#FDCC4E',
   },
 });

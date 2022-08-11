@@ -16,15 +16,20 @@ import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import {Card, CardProps} from '../../components/cards';
 import {useFocusEffect} from '@react-navigation/native';
+import ClearModal from '../../components/modal/clearItemsModal';
 
 export default function Home() {
   const navigation = useNavigation();
   const [total, setTotal] = useState(0);
   const [itemsInTheBag, setItemsInTheBag] = useState(0);
+  const [clearmodal, setClearModal] = useState(false);
+  const emptyBag = itemsInTheBag < 2;
 
   const [itensContainer, setItensContainer] = useState<CardProps[]>([]);
 
-  const {getItem, setItem} = useAsyncStorage('@supermarketAssistent');
+  const {getItem, setItem, removeItem} = useAsyncStorage(
+    '@supermarketAssistent',
+  );
 
   async function handleAddItem() {
     try {
@@ -45,6 +50,14 @@ export default function Home() {
     setItem(JSON.stringify(data));
     setItensContainer(data);
     handleTotal();
+  }
+
+  async function handleRemoveAll() {
+    await removeItem();
+    setItensContainer([]);
+    setItemsInTheBag(0);
+    setTotal(0);
+    setClearModal(false);
   }
   async function handleTotal() {
     try {
@@ -67,11 +80,6 @@ export default function Home() {
         if (transform.length > 4) {
           setTotal(Number(result));
         }
-
-        console.log('number: ', number);
-        console.log('transf: ', transform);
-        console.log('result; ', result);
-        console.log('result222; ', decimalResult);
       }
     } catch (error) {
       console.error(error);
@@ -130,9 +138,28 @@ export default function Home() {
         )}
       />
       <AddItems>
-        <Text style={styles.headerText}>VALOR TOTAL:</Text>
-        <Text style={styles.headerText}>R$ {total}</Text>
+        <Text style={[styles.headerText, {bottom: 22}]}>VALOR TOTAL:</Text>
+        <Text style={[styles.headerText, {bottom: 22}]}>R$ {total}</Text>
+        <TouchableOpacity
+          onPress={() => {
+            emptyBag ? null : setClearModal(true);
+          }}
+          style={[
+            styles.clean,
+            {backgroundColor: emptyBag ? '#ccc' : '#FDCC4E'},
+          ]}>
+          <Text>Finalizar compra</Text>
+        </TouchableOpacity>
       </AddItems>
+      <ClearModal
+        visible={clearmodal}
+        close={() => {
+          setClearModal(false);
+        }}
+        remove={() => {
+          handleRemoveAll();
+        }}
+      />
     </Container>
   );
 }
@@ -149,5 +176,14 @@ const styles = StyleSheet.create({
     height: '84%',
     borderWidth: 1,
     borderColor: '#FDCC4E',
+  },
+  clean: {
+    width: '40%',
+    height: '30%',
+    position: 'absolute',
+    bottom: 19,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
   },
 });
