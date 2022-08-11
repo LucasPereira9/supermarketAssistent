@@ -2,8 +2,8 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import React, {useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
-import Icon from 'react-native-vector-icons/AntDesign';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 export type CardProps = {
   id: string;
@@ -27,19 +27,46 @@ export function Card({data, onPress}: Props) {
     setFinished(!finished);
   }
   return (
-    <View style={{minWidth: '100%', flexDirection: 'row'}}>
-      <TouchableOpacity onPress={() => handleFinished(data.id)}>
-        <Icon name={finished ? 'left' : 'down'} size={60} color="#cc0000" />
-      </TouchableOpacity>
-      <View style={{flexDirection: 'row'}}>
-        <Text style={{color: '#000', padding: 10}}>{data.unity}</Text>
-        <Text style={{color: '#000', padding: 10}}>{data.amount}</Text>
-        <Text style={{color: '#000', padding: 10}}>R$ {data.value}</Text>
-      </View>
+    <View style={styles.CardView}>
+      <View
+        style={[
+          styles.CardView,
+          {
+            backgroundColor: finished ? '#4dd831ae' : '#FDCC4E',
+            width: '100%',
+            borderRadius: 20,
+          },
+        ]}>
+        <TouchableOpacity onPress={() => handleFinished(data.id)}>
+          <Icon
+            name={finished ? 'check-square' : 'square'}
+            size={40}
+            color={finished ? '#2bff00' : '#040fa7'}
+          />
+        </TouchableOpacity>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={{color: '#000', padding: 10, width: '41%'}}>
+            {data.unity}
+          </Text>
+          <Text style={{color: '#000', padding: 10}}>{data.amount}</Text>
+          <Text style={{color: '#000', padding: 10, width: '36%'}}>
+            R$ {data.value} und.
+          </Text>
+        </View>
 
-      <TouchableOpacity onPress={onPress}>
-        <Icon name="delete" size={22} color="#888D97" />
-      </TouchableOpacity>
+        <TouchableOpacity style={{top: '2%', right: '48%'}} onPress={onPress}>
+          <Icon name="trash-2" size={22} color="#888D97" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  CardView: {
+    minWidth: '80%',
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+});

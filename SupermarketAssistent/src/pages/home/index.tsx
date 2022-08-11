@@ -7,9 +7,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
+  View,
+  Image,
 } from 'react-native';
 import {Container, AddItems, Header} from './styles';
-import Icon from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/Feather';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import {Card, CardProps} from '../../components/cards';
@@ -18,6 +20,7 @@ import {useFocusEffect} from '@react-navigation/native';
 export default function Home() {
   const navigation = useNavigation();
   const [total, setTotal] = useState(0);
+  const [itemsInTheBag, setItemsInTheBag] = useState(0);
 
   const [itensContainer, setItensContainer] = useState<CardProps[]>([]);
 
@@ -29,6 +32,7 @@ export default function Home() {
 
       const data = response ? JSON.parse(response) : [];
       setItensContainer(data);
+      setItemsInTheBag(data.length);
     } catch (error) {
       console.log(error);
     }
@@ -46,6 +50,9 @@ export default function Home() {
     try {
       const response = await getItem();
       const previousItens = response ? JSON.parse(response) : [];
+      if (previousItens.length === 0) {
+        setTotal(0);
+      }
       const data = previousItens.map((item: CardProps) => item.value);
       var number = 0;
       for (var i = 0; i < data.length; i++) {
@@ -85,10 +92,34 @@ export default function Home() {
 
   return (
     <Container>
-      <StatusBar barStyle="dark-content" backgroundColor={'#ffffff'} />
+      <StatusBar backgroundColor={'#040fa7'} />
       <Header>
-        <Text style={styles.headerText}>LISTA DE COMPRAS</Text>
+        <Image
+          resizeMode="contain"
+          style={styles.clientPhoto}
+          source={require('../../assets/Lucas_bit.png')}
+        />
+        <Text style={styles.headerText}>
+          LISTA {'\n'} DE {'\n'} COMPRAS
+        </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('NewItems')}>
+          <Icon
+            style={{left: '40%'}}
+            name="plus-square"
+            size={45}
+            color="#FDCC4E"
+          />
+        </TouchableOpacity>
       </Header>
+      <View
+        style={{
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          width: '100%',
+        }}>
+        <Text />
+        <Text style={{padding: 4}}>temos {itemsInTheBag} items na sacola</Text>
+      </View>
       <FlatList
         data={itensContainer}
         keyExtractor={item => item.id}
@@ -99,10 +130,8 @@ export default function Home() {
         )}
       />
       <AddItems>
-        <Text>VALOR TOTAL:</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('NewItems')}>
-          <Text>R$ {total}</Text>
-        </TouchableOpacity>
+        <Text style={styles.headerText}>VALOR TOTAL:</Text>
+        <Text style={styles.headerText}>R$ {total}</Text>
       </AddItems>
     </Container>
   );
@@ -110,19 +139,15 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   headerText: {
-    fontSize: 26,
+    fontSize: 24,
+    color: '#fff',
+    padding: 4,
+    textAlign: 'center',
   },
-  ListView: {
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-    padding: 10,
-    backgroundColor: '#ffffff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#868484',
-    minWidth: '90%',
-  },
-  modalContainer: {
-    justifyContent: 'center',
-    backgroundColor: '#ffffff',
+  clientPhoto: {
+    width: '26%',
+    height: '84%',
+    borderWidth: 1,
+    borderColor: '#FDCC4E',
   },
 });
