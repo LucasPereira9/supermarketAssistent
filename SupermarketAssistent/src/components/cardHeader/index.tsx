@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
@@ -7,12 +8,19 @@ export default function HeaderForm() {
   const navigation = useNavigation();
 
   return (
-    <View>
+    <View
+      style={{
+        width: '100%',
+        height: '10%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#040fa7',
+      }}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Icon name="chevron-left" size={32} color="#1967FB" />
+        <Icon name="left" size={32} color="#FDCC4E" />
       </TouchableOpacity>
 
-      <Text>Cadastro</Text>
+      <Text style={{color: '#fff'}}>Novo Item</Text>
     </View>
   );
 }

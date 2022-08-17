@@ -1,26 +1,35 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Text,
   StatusBar,
   TouchableOpacity,
   StyleSheet,
   FlatList,
+  View,
+  Image,
 } from 'react-native';
 import {Container, AddItems, Header} from './styles';
-import Icon from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/Feather';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import {Card, CardProps} from '../../components/cards';
 import {useFocusEffect} from '@react-navigation/native';
+import ClearModal from '../../components/modal/clearItemsModal';
 
 export default function Home() {
   const navigation = useNavigation();
+  const [total, setTotal] = useState(0);
+  const [itemsInTheBag, setItemsInTheBag] = useState(0);
+  const [clearmodal, setClearModal] = useState(false);
+  const emptyBag = itemsInTheBag < 2;
 
   const [itensContainer, setItensContainer] = useState<CardProps[]>([]);
 
-  const {getItem, setItem} = useAsyncStorage('@supermarketAssistent');
+  const {getItem, setItem, removeItem} = useAsyncStorage(
+    '@supermarketAssistent',
+  );
 
   async function handleAddItem() {
     try {
@@ -28,6 +37,7 @@ export default function Home() {
 
       const data = response ? JSON.parse(response) : [];
       setItensContainer(data);
+      setItemsInTheBag(data.length);
     } catch (error) {
       console.log(error);
     }
@@ -39,15 +49,50 @@ export default function Home() {
     const data = previousItens.filter((item: CardProps) => item.id !== id);
     setItem(JSON.stringify(data));
     setItensContainer(data);
+    handleTotal();
   }
-  async function handleTotal(total: string) {
-    const response = await getItem();
-    const previousItens = response ? JSON.parse(response) : [];
-    const data = previousItens.filter(
-      (item: CardProps) => item.value === total,
-    );
-    console.log(data);
+
+  async function handleRemoveAll() {
+    await removeItem();
+    setItensContainer([]);
+    setItemsInTheBag(0);
+    setTotal(0);
+    setClearModal(false);
   }
+  async function handleTotal() {
+    try {
+      const response = await getItem();
+      const previousItens = response ? JSON.parse(response) : [];
+      if (previousItens.length === 0) {
+        setTotal(0);
+      }
+      const data = previousItens.map((item: CardProps) => item.value);
+      var number = 0;
+      for (var i = 0; i < data.length; i++) {
+        number = number += parseFloat(data[i]);
+        console.log(number);
+        const transform = number.toString();
+        const result = transform.substr(0, 6);
+        const decimalResult = transform.substr(0, 5);
+
+        if (transform.length < 4) {
+          setTotal(Number(decimalResult));
+        }
+        if (transform.length > 4) {
+          setTotal(Number(result));
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      handleTotal();
+    }, []),
+  );
+
   useFocusEffect(
     useCallback(() => {
       handleAddItem();
@@ -56,10 +101,34 @@ export default function Home() {
 
   return (
     <Container>
-      <StatusBar barStyle="dark-content" backgroundColor={'#ffffff'} />
+      <StatusBar backgroundColor={'#040fa7'} />
       <Header>
-        <Text style={styles.headerText}>LISTA DE COMPRAS</Text>
+        <Image
+          resizeMode="contain"
+          style={styles.clientPhoto}
+          source={require('../../assets/Lucas_bit.png')}
+        />
+        <Text style={styles.headerText}>
+          LISTA {'\n'} DE {'\n'} COMPRAS
+        </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('NewItems')}>
+          <Icon
+            style={{left: '40%'}}
+            name="plus-square"
+            size={45}
+            color="#FDCC4E"
+          />
+        </TouchableOpacity>
       </Header>
+      <View
+        style={{
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          width: '100%',
+        }}>
+        <Text />
+        <Text style={{padding: 4}}>temos {itemsInTheBag} items na sacola</Text>
+      </View>
       <FlatList
         data={itensContainer}
         keyExtractor={item => item.id}
@@ -70,30 +139,52 @@ export default function Home() {
         )}
       />
       <AddItems>
-        <Text>VALOR TOTAL:</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('NewItems')}>
-          <Text>TURURU</Text>
+        <Text style={[styles.headerText, {bottom: 22}]}>VALOR TOTAL:</Text>
+        <Text style={[styles.headerText, {bottom: 22}]}>R$ {total}</Text>
+        <TouchableOpacity
+          onPress={() => {
+            emptyBag ? null : setClearModal(true);
+          }}
+          style={[
+            styles.clean,
+            {backgroundColor: emptyBag ? '#ccc' : '#FDCC4E'},
+          ]}>
+          <Text>Finalizar compra</Text>
         </TouchableOpacity>
       </AddItems>
+      <ClearModal
+        visible={clearmodal}
+        close={() => {
+          setClearModal(false);
+        }}
+        remove={() => {
+          handleRemoveAll();
+        }}
+      />
     </Container>
   );
 }
 
 const styles = StyleSheet.create({
   headerText: {
-    fontSize: 26,
+    fontSize: 24,
+    color: '#fff',
+    padding: 4,
+    textAlign: 'center',
   },
-  ListView: {
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-    padding: 10,
-    backgroundColor: '#ffffff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#868484',
-    minWidth: '90%',
+  clientPhoto: {
+    width: '26%',
+    height: '84%',
+    borderWidth: 1,
+    borderColor: '#FDCC4E',
   },
-  modalContainer: {
+  clean: {
+    width: '40%',
+    height: '30%',
+    position: 'absolute',
+    bottom: 19,
     justifyContent: 'center',
-    backgroundColor: '#ffffff',
+    alignItems: 'center',
+    borderRadius: 4,
   },
 });

@@ -5,17 +5,21 @@ export const Container = styled.View`
   background: #ffffff;
   align-items: center;
 `;
+export const Header = styled.View`
+  min-width: 100%;
+  height: 22%;
+  background-color: #040fa7;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10%;
+  flex-direction: row;
+`;
+
 export const AddItems = styled.View`
   min-width: 100%;
   min-height: 14%;
-  background: #868484;
+  background-color: #040fa7;
   align-items: center;
   justify-content: center;
-`;
-
-export const Header = styled.View`
-  min-width: 100%;
-  justify-content: center;
-  align-items: center;
-  padding: 10%;
+  flex-direction: row;
 `;
