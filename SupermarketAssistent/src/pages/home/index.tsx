@@ -70,6 +70,7 @@ export default function Home() {
       var number = 0;
       for (var i = 0; i < data.length; i++) {
         number = number += parseFloat(data[i]);
+        console.log(number);
         const transform = number.toString();
         const result = transform.substr(0, 6);
         const decimalResult = transform.substr(0, 5);

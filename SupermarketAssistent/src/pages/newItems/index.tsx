@@ -89,7 +89,14 @@ export default function NewItems() {
           rightButtonBackgroundColor="#FDCC4E"
           leftButtonBackgroundColor="#FDCC4E"
         />
-        <View style={{flexDirection: 'row', padding: 30}}>
+        <View
+          style={{
+            top: 15,
+            flexDirection: 'row',
+            borderWidth: 1,
+            borderColor: '#FDCC4E',
+            borderRadius: 14,
+          }}>
           <TouchableOpacity
             onPress={() => {
               setSelectedMultiply(false);
@@ -100,7 +107,7 @@ export default function NewItems() {
               borderRadius: 14,
             }}>
             <Text style={{textAlign: 'center', padding: 16, color: '#fff'}}>
-              Valor total unitário {'\n'} R$ {changePrice ? null : value}
+              Valor unitário {'\n'} R$ {changePrice ? null : value}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -120,11 +127,14 @@ export default function NewItems() {
           </TouchableOpacity>
         </View>
         <TouchableOpacity
-          style={[styles.button, {backgroundColor: empty ? '#ccc' : '#FDCC4E'}]}
+          style={[
+            styles.button,
+            {backgroundColor: empty ? '#ccc' : '#FDCC4E', top: 25},
+          ]}
           onPress={() => {
             setValue(result);
             console.log(value);
-            handleMoreItens();
+            empty ? null : handleMoreItens();
           }}>
           <Text style={{color: '#000000'}}>ADICIONAR</Text>
         </TouchableOpacity>
