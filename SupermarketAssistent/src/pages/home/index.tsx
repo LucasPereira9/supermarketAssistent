@@ -10,7 +10,7 @@ import {
   View,
   Alert,
 } from 'react-native';
-import {Container, TabContainer, SelectValue} from './styles';
+import {Container, SelectValue} from './styles';
 import Icon from 'react-native-vector-icons/Feather';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {Card, CardProps} from '../../components/cards';
@@ -18,15 +18,14 @@ import {useFocusEffect} from '@react-navigation/native';
 import ClearModal from '../../components/modal/clearItemsModal';
 import uuid from 'uuid/v4';
 import HomeHeader from '../../components/homeHeader';
-import LottieView from 'lottie-react-native';
-import AmountInput from '../../components/numericInput';
 import MoneyInput from '../../components/moneyInput';
 import InputText from '../../components/textInput';
+import TabContainer from '../../components/TabContainer';
 
 export default function Home() {
   const [unity, setUnity] = useState('');
   const [value, setValue] = useState<any>('');
-  const [amount, setAmount] = useState<Number>(1);
+  const [amount, setAmount] = useState('');
 
   const [total, setTotal] = useState<Number>(0);
   const [itemsInTheBag, setItemsInTheBag] = useState(0);
@@ -36,6 +35,7 @@ export default function Home() {
   const [changePrice, setChangePrice] = useState(false);
 
   const emptyBag = itemsInTheBag < 2;
+  const empty = unity === '' || value === '' || amount === '';
 
   const {getItem, setItem, removeItem} = useAsyncStorage(
     '@supermarketAssistent',
@@ -62,7 +62,9 @@ export default function Home() {
       result = '0';
       setUnity('');
       setValue('');
-      setAmount(1);
+      setAmount('1');
+      setChangePrice(false);
+      setSelectedValue(true);
     } catch (error) {
       console.log(error);
       Alert.alert('deu ruim');
@@ -145,10 +147,10 @@ export default function Home() {
         <Text />
         <Text style={{padding: 4}}>
           {itemsInTheBag === 0
-            ? 'sacola está vazia'
+            ? 'A sacola está vazia'
             : itemsInTheBag === 1
-            ? `temos ${itemsInTheBag} item na sacola`
-            : `temos ${itemsInTheBag} itens na sacola`}
+            ? `${itemsInTheBag} item na sacola`
+            : `${itemsInTheBag} itens na sacola`}
         </Text>
       </View>
       <View style={styles.CardView}>
@@ -156,7 +158,7 @@ export default function Home() {
           style={[
             styles.CardView,
             {
-              height: 115,
+              height: 135,
               backgroundColor: '#FDCC4E',
               width: '100%',
               borderRadius: 6,
@@ -168,14 +170,24 @@ export default function Home() {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <View style={{minWidth: '22%', maxWidth: '27%'}}>
-              <InputText value={unity} seted={setUnity} />
+            <View style={{width: '18%', right: 18}}>
+              <InputText
+                type={'default'}
+                Text={'Item'}
+                value={unity}
+                seted={setUnity}
+              />
             </View>
 
             <MoneyInput value={value} seted={setValue} />
 
-            <View style={{left: 22}}>
-              <AmountInput value={amount} seted={setAmount} />
+            <View style={{width: '17%', left: 10}}>
+              <InputText
+                type={'numeric'}
+                Text={'Quant.'}
+                value={String(amount)}
+                seted={setAmount}
+              />
             </View>
 
             <SelectValue>
@@ -183,6 +195,7 @@ export default function Home() {
                 style={{width: '100%'}}
                 onPress={() => {
                   setSelectedValue(true);
+                  setChangePrice(false);
                 }}>
                 <Text
                   style={[
@@ -196,7 +209,7 @@ export default function Home() {
               <TouchableOpacity
                 style={{width: '100%'}}
                 onPress={() => {
-                  setValue(result);
+                  selectedValue ? setValue(result) : null;
                   setChangePrice(true);
                   setSelectedValue(false);
                 }}>
@@ -207,15 +220,21 @@ export default function Home() {
                       backgroundColor: selectedValue ? '#FDCC4E' : '#040fa7',
                     },
                   ]}>
-                  Multi. {'\n'} {changePrice ? value : result}
+                  Multiplicado {'\n'} {changePrice ? value : result}
                 </Text>
               </TouchableOpacity>
             </SelectValue>
 
             <TouchableOpacity
-              style={{left: 40, top: 6}}
-              onPress={() => handleMoreItens()}>
-              <Icon name="plus-square" size={30} color="#040fa7" />
+              style={{left: 50, top: 6}}
+              onPress={() => {
+                empty ? null : handleMoreItens();
+              }}>
+              <Icon
+                name="plus-square"
+                size={30}
+                color={empty ? '#727070' : '#040fa7'}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -231,36 +250,13 @@ export default function Home() {
         )}
       />
 
-      <TabContainer>
-        <Text style={[styles.headerText, {bottom: 26}]}>VALOR TOTAL: </Text>
-        <Text style={[styles.headerText, {bottom: 26}]}>R$ {total}</Text>
-        <TouchableOpacity
-          onPress={() => handleTotal()}
-          style={{
-            maxHeight: '40%',
-            bottom: 20,
-          }}>
-          <LottieView
-            style={{
-              height: '78%',
-              left: 5,
-            }}
-            source={require('../../assets/animations/reload.json')}
-            autoPlay
-          />
-        </TouchableOpacity>
+      <TabContainer
+        Total={total}
+        setTotal={() => handleTotal()}
+        bag={emptyBag}
+        modal={() => (emptyBag ? null : setClearModal(true))}
+      />
 
-        <TouchableOpacity
-          onPress={() => {
-            emptyBag ? null : setClearModal(true);
-          }}
-          style={[
-            styles.clean,
-            {backgroundColor: emptyBag ? '#ccc' : '#FDCC4E'},
-          ]}>
-          <Text>Finalizar compra</Text>
-        </TouchableOpacity>
-      </TabContainer>
       <ClearModal
         visible={clearmodal}
         close={() => {
@@ -281,15 +277,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  clean: {
-    width: '40%',
-    height: '30%',
-    position: 'absolute',
-    bottom: 19,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 4,
-  },
   CardView: {
     width: '100%',
     padding: 10,

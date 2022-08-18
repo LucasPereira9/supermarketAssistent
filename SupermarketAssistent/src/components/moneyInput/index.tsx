@@ -11,8 +11,8 @@ export default function MoneyInput({value, seted}: {value: any; seted: any}) {
           borderBottomWidth: 1,
           borderBottomColor: '#040fa7',
           textAlign: 'center',
-          bottom: 5,
-          left: 10,
+          bottom: 6,
+          right: 6,
         }}
         placeholder="R$"
         placeholderTextColor={'#00000083'}

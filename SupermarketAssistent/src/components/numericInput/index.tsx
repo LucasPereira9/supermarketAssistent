@@ -14,8 +14,8 @@ export default function AmountInput({value, seted}: {value: any; seted: any}) {
         type="up-down"
         rounded
         textColor="#000000"
-        totalWidth={78}
-        totalHeight={58}
+        totalWidth={74}
+        totalHeight={50}
         upDownButtonsBackgroundColor="#040fa7"
         iconStyle={{color: '#FDCC4E'}}
         borderColor="#040fa7"

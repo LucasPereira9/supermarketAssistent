@@ -51,16 +51,16 @@ export function Card({data, onPress}: Props) {
           />
         </TouchableOpacity>
         <View style={{flexDirection: 'row'}}>
-          <Text style={{color: '#000', padding: 10, width: '31%'}}>
+          <Text style={{color: '#000', padding: 10, width: '38%'}}>
             {data.unity}
           </Text>
           <Text style={{color: '#000', padding: 10}}>{data.amount}</Text>
-          <Text style={{color: '#000', padding: 10, width: '36%'}}>
+          <Text style={{color: '#000', padding: 10, width: '30%'}}>
             R$ {editedValue}
           </Text>
         </View>
 
-        <TouchableOpacity style={{top: '2%', right: '8%'}} onPress={onPress}>
+        <TouchableOpacity style={{top: '2%', right: '27%'}} onPress={onPress}>
           <Icon name="trash-2" size={24} color="#040fa7" />
         </TouchableOpacity>
       </View>
