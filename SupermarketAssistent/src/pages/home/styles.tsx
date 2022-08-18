@@ -15,11 +15,19 @@ export const Header = styled.View`
   flex-direction: row;
 `;
 
-export const AddItems = styled.View`
+export const TabContainer = styled.View`
   min-width: 100%;
-  min-height: 14%;
+  height: 16%;
   background-color: #040fa7;
   align-items: center;
   justify-content: center;
   flex-direction: row;
+`;
+export const SelectValue = styled.View`
+  left: 30%;
+  border-width: 1px;
+  border-color: #040fa7;
+  border-radius: 6px;
+  justify-content: center;
+  align-items: center;
 `;
