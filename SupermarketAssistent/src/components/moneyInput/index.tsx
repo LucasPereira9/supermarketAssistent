@@ -2,7 +2,13 @@
 import React from 'react';
 import MaskInput from 'react-native-mask-input';
 
-export default function MoneyInput({value, seted}: {value: any; seted: any}) {
+export default function MoneyInput({
+  value,
+  seted,
+}: {
+  value: string;
+  seted: Function;
+}) {
   return (
     <>
       <MaskInput

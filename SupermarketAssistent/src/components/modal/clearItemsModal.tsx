@@ -5,12 +5,12 @@ import Modal from 'react-native-modal';
 
 const ClearModal = ({
   visible,
-  close,
-  remove,
+  onPressOut,
+  onPressDelete,
 }: {
-  visible: any;
-  close: any;
-  remove: any;
+  onPressDelete: () => void;
+  onPressOut: () => void;
+  visible: boolean;
 }) => {
   return (
     <Modal
@@ -25,7 +25,7 @@ const ClearModal = ({
         <View
           style={{
             width: '100%',
-            height: '20%',
+            height: '22%',
             backgroundColor: '#040fa7',
             borderRadius: 10,
           }}>
@@ -34,10 +34,10 @@ const ClearModal = ({
             não pode ser desfeita!
           </Text>
           <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-            <TouchableOpacity onPress={close} style={styles.button}>
+            <TouchableOpacity onPress={onPressOut} style={styles.button}>
               <Text>Cancelar</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={remove} style={styles.button}>
+            <TouchableOpacity onPress={onPressDelete} style={styles.button}>
               <Text>Prosseguir</Text>
             </TouchableOpacity>
           </View>

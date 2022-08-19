@@ -1,17 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {TextInput} from 'react-native';
+import {KeyboardTypeOptions, TextInput} from 'react-native';
 
 export default function InputText({
   value,
-  seted,
+  setFunction,
   Text,
   type,
 }: {
-  value: any;
-  seted: any;
-  Text: any;
-  type: any;
+  value: string;
+  setFunction: Function;
+  Text: string;
+  type: KeyboardTypeOptions;
 }) {
   return (
     <>
@@ -25,7 +25,9 @@ export default function InputText({
         }}
         value={value}
         placeholder={Text}
-        onChangeText={seted}
+        onChangeText={string => {
+          setFunction(string);
+        }}
         placeholderTextColor={'#00000083'}
         keyboardType={type}
       />

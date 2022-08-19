@@ -27,15 +27,16 @@ export default function Home() {
   const [value, setValue] = useState<any>('');
   const [amount, setAmount] = useState('');
 
-  const [total, setTotal] = useState<Number>(0);
+  const [total, setTotal] = useState<number>(0);
   const [itemsInTheBag, setItemsInTheBag] = useState(0);
-  const [clearmodal, setClearModal] = useState<Boolean>(false);
+  const [clearmodal, setClearModal] = useState<boolean>(false);
   const [itensContainer, setItensContainer] = useState<CardProps[]>([]);
   const [selectedValue, setSelectedValue] = useState(true);
   const [changePrice, setChangePrice] = useState(false);
 
   const emptyBag = itemsInTheBag < 2;
-  const empty = unity === '' || value === '' || amount === '';
+  const empty =
+    unity === '' || value === '' || value.length < 5 || amount === '';
 
   const {getItem, setItem, removeItem} = useAsyncStorage(
     '@supermarketAssistent',
@@ -175,7 +176,7 @@ export default function Home() {
                 type={'default'}
                 Text={'Item'}
                 value={unity}
-                seted={setUnity}
+                setFunction={setUnity}
               />
             </View>
 
@@ -186,7 +187,7 @@ export default function Home() {
                 type={'numeric'}
                 Text={'Quant.'}
                 value={String(amount)}
-                seted={setAmount}
+                setFunction={setAmount}
               />
             </View>
 
@@ -254,17 +255,15 @@ export default function Home() {
         Total={total}
         setTotal={() => handleTotal()}
         bag={emptyBag}
-        modal={() => (emptyBag ? null : setClearModal(true))}
+        setModal={() => (emptyBag ? null : setClearModal(true))}
       />
 
       <ClearModal
         visible={clearmodal}
-        close={() => {
+        onPressOut={() => {
           setClearModal(false);
         }}
-        remove={() => {
-          handleRemoveAll();
-        }}
+        onPressDelete={() => handleRemoveAll()}
       />
     </Container>
   );

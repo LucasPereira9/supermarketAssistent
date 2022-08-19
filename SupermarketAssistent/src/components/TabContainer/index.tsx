@@ -7,12 +7,12 @@ export default function TabContainer({
   Total,
   setTotal,
   bag,
-  modal,
+  setModal,
 }: {
-  Total: any;
-  setTotal: any;
-  bag: any;
-  modal: any;
+  Total: number;
+  setTotal: () => void;
+  bag: boolean;
+  setModal: () => void;
 }) {
   return (
     <View style={styles.Container}>
@@ -35,7 +35,7 @@ export default function TabContainer({
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={modal}
+        onPress={setModal}
         style={[styles.clean, {backgroundColor: bag ? '#ccc' : '#FDCC4E'}]}>
         <Text>Finalizar compra</Text>
       </TouchableOpacity>

@@ -19,7 +19,7 @@ export default function HomeHeader() {
 const styles = StyleSheet.create({
   Header: {
     width: '100%',
-    height: '22%',
+    height: '24%',
     backgroundColor: '#040fa7',
     justifyContent: 'space-around',
     alignItems: 'center',

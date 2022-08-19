@@ -1,7 +1,13 @@
 import React from 'react';
 import NumericInput from 'react-native-numeric-input';
 
-export default function AmountInput({value, seted}: {value: any; seted: any}) {
+export default function AmountInput({
+  value,
+  seted,
+}: {
+  value: number;
+  seted: Function;
+}) {
   return (
     <>
       <NumericInput
