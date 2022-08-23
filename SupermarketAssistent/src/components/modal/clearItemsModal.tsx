@@ -1,17 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Modal from 'react-native-modal';
+import LottieView from 'lottie-react-native';
 
 const ClearModal = ({
   visible,
-  close,
-  remove,
+  onPressOut,
+  onPressDelete,
 }: {
-  visible: any;
-  close: any;
-  remove: any;
+  onPressDelete: () => void;
+  onPressOut: () => void;
+  visible: boolean;
 }) => {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   return (
     <Modal
       isVisible={visible}
@@ -25,22 +28,84 @@ const ClearModal = ({
         <View
           style={{
             width: '100%',
-            height: '20%',
+            minHeight: '20%',
             backgroundColor: '#040fa7',
             borderRadius: 10,
           }}>
-          <Text style={{textAlign: 'center', padding: 26, color: '#fff'}}>
-            Você está prestes a limpar sua lista de compras {'\n'}e esta ação
-            não pode ser desfeita!
-          </Text>
-          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-            <TouchableOpacity onPress={close} style={styles.button}>
-              <Text>Cancelar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={remove} style={styles.button}>
-              <Text>Prosseguir</Text>
-            </TouchableOpacity>
-          </View>
+          {loading ? (
+            <View style={styles.lottieViews}>
+              <LottieView
+                source={require('../../assets/animations/shopping-cart.json')}
+                autoPlay
+              />
+            </View>
+          ) : success ? (
+            <View style={styles.lottieViews}>
+              <LottieView
+                style={{bottom: '6%', width: '40%'}}
+                source={require('../../assets/animations/success.json')}
+                autoPlay
+                loop={false}
+              />
+              <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => {
+                  setTimeout(() => {
+                    setSuccess(false);
+                  }, 3000);
+
+                  onPressOut();
+                }}>
+                <Text
+                  style={{
+                    fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+                  }}>
+                  Voltar
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  padding: 26,
+                  color: '#fff',
+                  fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+                }}>
+                Você está prestes a limpar sua lista de compras {'\n'}e esta
+                ação não pode ser desfeita!
+              </Text>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                <TouchableOpacity onPress={onPressOut} style={styles.button}>
+                  <Text
+                    style={{
+                      fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+                    }}>
+                    Cancelar
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setLoading(true);
+                    setTimeout(() => {
+                      setSuccess(true);
+                      setLoading(false);
+                      onPressDelete();
+                    }, 6200);
+                  }}
+                  style={styles.button}>
+                  <Text
+                    style={{
+                      fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+                    }}>
+                    Prosseguir
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
         </View>
       }
     />
@@ -56,5 +121,20 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  lottieViews: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  backButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: '70%',
+    backgroundColor: '#FDCC4E',
+    borderRadius: 6,
+    width: '24%',
+    height: '20%',
   },
 });

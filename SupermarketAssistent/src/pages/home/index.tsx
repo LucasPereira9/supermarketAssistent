@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   Text,
   StatusBar,
@@ -8,28 +8,70 @@ import {
   StyleSheet,
   FlatList,
   View,
-  Image,
+  Alert,
 } from 'react-native';
-import {Container, AddItems, Header} from './styles';
+import {Container, SelectValue} from './styles';
 import Icon from 'react-native-vector-icons/Feather';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
-import {useNavigation} from '@react-navigation/native';
 import {Card, CardProps} from '../../components/cards';
 import {useFocusEffect} from '@react-navigation/native';
 import ClearModal from '../../components/modal/clearItemsModal';
+import uuid from 'uuid/v4';
+import HomeHeader from '../../components/homeHeader';
+import MoneyInput from '../../components/moneyInput';
+import InputText from '../../components/textInput';
+import TabContainer from '../../components/TabContainer';
+import LottieView from 'lottie-react-native';
 
 export default function Home() {
-  const navigation = useNavigation();
-  const [total, setTotal] = useState(0);
-  const [itemsInTheBag, setItemsInTheBag] = useState(0);
-  const [clearmodal, setClearModal] = useState(false);
-  const emptyBag = itemsInTheBag < 2;
+  const [unity, setUnity] = useState('');
+  const [value, setValue] = useState<any>('');
+  const [amount, setAmount] = useState('');
 
+  const [total, setTotal] = useState<number>(0);
+  const [itemsInTheBag, setItemsInTheBag] = useState(0);
+  const [clearmodal, setClearModal] = useState<boolean>(false);
   const [itensContainer, setItensContainer] = useState<CardProps[]>([]);
+  const [selectedValue, setSelectedValue] = useState(true);
+  const [changePrice, setChangePrice] = useState(false);
+
+  const emptyBag = itemsInTheBag < 2;
+  const empty =
+    unity === '' || value === '' || value.length < 5 || amount === '';
 
   const {getItem, setItem, removeItem} = useAsyncStorage(
     '@supermarketAssistent',
   );
+  const multiply = Number(value) * Number(amount);
+  const fixed = parseFloat(String(multiply));
+  let result = String(fixed).substr(0, 5);
+
+  async function handleMoreItens() {
+    try {
+      const id = uuid();
+      const NewItem = {
+        id,
+        unity,
+        value,
+        amount,
+      };
+      const response = await getItem();
+      const previousItens = response ? JSON.parse(response) : [];
+      const data = [NewItem, ...previousItens];
+
+      await setItem(JSON.stringify(data));
+
+      result = '0';
+      setUnity('');
+      setValue('');
+      setAmount('1');
+      setChangePrice(false);
+      setSelectedValue(true);
+    } catch (error) {
+      console.log(error);
+      Alert.alert('deu ruim');
+    }
+  }
 
   async function handleAddItem() {
     try {
@@ -57,7 +99,6 @@ export default function Home() {
     setItensContainer([]);
     setItemsInTheBag(0);
     setTotal(0);
-    setClearModal(false);
   }
   async function handleTotal() {
     try {
@@ -70,7 +111,6 @@ export default function Home() {
       var number = 0;
       for (var i = 0; i < data.length; i++) {
         number = number += parseFloat(data[i]);
-        console.log(number);
         const transform = number.toString();
         const result = transform.substr(0, 6);
         const decimalResult = transform.substr(0, 5);
@@ -89,12 +129,6 @@ export default function Home() {
 
   useFocusEffect(
     useCallback(() => {
-      handleTotal();
-    }, []),
-  );
-
-  useFocusEffect(
-    useCallback(() => {
       handleAddItem();
     }, [handleAddItem]),
   );
@@ -102,24 +136,9 @@ export default function Home() {
   return (
     <Container>
       <StatusBar backgroundColor={'#040fa7'} />
-      <Header>
-        <Image
-          resizeMode="contain"
-          style={styles.clientPhoto}
-          source={require('../../assets/Lucas_bit.png')}
-        />
-        <Text style={styles.headerText}>
-          LISTA {'\n'} DE {'\n'} COMPRAS
-        </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('NewItems')}>
-          <Icon
-            style={{left: '40%'}}
-            name="plus-square"
-            size={45}
-            color="#FDCC4E"
-          />
-        </TouchableOpacity>
-      </Header>
+
+      <HomeHeader />
+
       <View
         style={{
           justifyContent: 'space-between',
@@ -127,8 +146,127 @@ export default function Home() {
           width: '100%',
         }}>
         <Text />
-        <Text style={{padding: 4}}>temos {itemsInTheBag} items na sacola</Text>
+        <Text
+          style={{
+            padding: 4,
+            fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+          }}>
+          {itemsInTheBag === 0
+            ? 'A sacola está vazia'
+            : itemsInTheBag === 1
+            ? `${itemsInTheBag} item na sacola`
+            : `${itemsInTheBag} itens na sacola`}
+        </Text>
       </View>
+      <View style={styles.CardView}>
+        <View
+          style={[
+            styles.CardView,
+            {
+              height: 135,
+              backgroundColor: '#FDCC4E',
+              width: '100%',
+              borderRadius: 6,
+            },
+          ]}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View style={{width: '20%', right: 18}}>
+              <InputText
+                type={'default'}
+                Text={'Item'}
+                value={unity}
+                setFunction={setUnity}
+              />
+            </View>
+
+            <MoneyInput value={value} seted={setValue} />
+
+            <View style={{width: '17%', left: 10}}>
+              <InputText
+                type={'numeric'}
+                Text={'Quant.'}
+                value={String(amount)}
+                setFunction={setAmount}
+              />
+            </View>
+
+            <SelectValue>
+              <TouchableOpacity
+                style={{width: '100%'}}
+                onPress={() => {
+                  setSelectedValue(true);
+                  setChangePrice(false);
+                }}>
+                <Text
+                  style={[
+                    styles.selectValueInput,
+                    {
+                      backgroundColor: selectedValue ? '#040fa7' : '#FDCC4E',
+                      fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+                    },
+                  ]}>
+                  Unitário {'\n'} {changePrice ? null : value}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{width: '100%'}}
+                onPress={() => {
+                  selectedValue ? setValue(result) : null;
+                  setChangePrice(true);
+                  setSelectedValue(false);
+                }}>
+                <Text
+                  style={[
+                    styles.selectValueInput,
+                    {
+                      backgroundColor: selectedValue ? '#FDCC4E' : '#040fa7',
+                      fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+                    },
+                  ]}>
+                  Multiplicado {'\n'} {changePrice ? value : result}
+                </Text>
+              </TouchableOpacity>
+            </SelectValue>
+            <TouchableOpacity
+              style={{
+                left: '98%',
+                position: 'absolute',
+                height: '82%',
+              }}
+              onPress={() => {
+                empty ? null : handleMoreItens();
+              }}>
+              {empty ? (
+                <LottieView
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                  }}
+                  source={require('../../assets/animations/addMoreGray.json')}
+                  autoPlay
+                  loop={false}
+                />
+              ) : (
+                <LottieView
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                  }}
+                  source={require('../../assets/animations/addMore.json')}
+                  autoPlay
+                />
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+
       <FlatList
         data={itensContainer}
         keyExtractor={item => item.id}
@@ -138,28 +276,20 @@ export default function Home() {
           <Card data={item} onPress={() => handleRemove(item.id)} />
         )}
       />
-      <AddItems>
-        <Text style={[styles.headerText, {bottom: 22}]}>VALOR TOTAL:</Text>
-        <Text style={[styles.headerText, {bottom: 22}]}>R$ {total}</Text>
-        <TouchableOpacity
-          onPress={() => {
-            emptyBag ? null : setClearModal(true);
-          }}
-          style={[
-            styles.clean,
-            {backgroundColor: emptyBag ? '#ccc' : '#FDCC4E'},
-          ]}>
-          <Text>Finalizar compra</Text>
-        </TouchableOpacity>
-      </AddItems>
+
+      <TabContainer
+        Total={total}
+        setTotal={() => handleTotal()}
+        bag={emptyBag}
+        setModal={() => (emptyBag ? null : setClearModal(true))}
+      />
+
       <ClearModal
         visible={clearmodal}
-        close={() => {
+        onPressOut={() => {
           setClearModal(false);
         }}
-        remove={() => {
-          handleRemoveAll();
-        }}
+        onPressDelete={() => handleRemoveAll()}
       />
     </Container>
   );
@@ -169,22 +299,21 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 24,
     color: '#fff',
-    padding: 4,
     textAlign: 'center',
+    fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
   },
-  clientPhoto: {
-    width: '26%',
-    height: '84%',
-    borderWidth: 1,
-    borderColor: '#FDCC4E',
-  },
-  clean: {
-    width: '40%',
-    height: '30%',
-    position: 'absolute',
-    bottom: 19,
-    justifyContent: 'center',
+
+  CardView: {
+    width: '100%',
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  selectValueInput: {
+    textAlign: 'center',
+    color: '#fff',
     borderRadius: 4,
+    padding: 2,
   },
 });

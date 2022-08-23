@@ -32,12 +32,6 @@ export function Card({data, onPress}: Props) {
     setFinished(!finished);
   }
 
-  async function handleEditCard(id: string) {
-    const response = await getItem();
-    const previousItens = response ? JSON.parse(response) : [];
-    const data1 = previousItens.filter((item: CardProps) => item.id === id);
-    setEditable(true);
-  }
   return (
     <View style={styles.CardView}>
       <View
@@ -57,22 +51,35 @@ export function Card({data, onPress}: Props) {
           />
         </TouchableOpacity>
         <View style={{flexDirection: 'row'}}>
-          <Text style={{color: '#000', padding: 10, width: '31%'}}>
+          <Text
+            style={{
+              color: '#000',
+              padding: 10,
+              minWidth: '38%',
+              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+            }}>
             {data.unity}
           </Text>
-          <Text style={{color: '#000', padding: 10}}>{data.amount}</Text>
-          <Text style={{color: '#000', padding: 10, width: '36%'}}>
+          <Text
+            style={{
+              color: '#000',
+              padding: 10,
+              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+            }}>
+            {data.amount}
+          </Text>
+          <Text
+            style={{
+              color: '#000',
+              padding: 10,
+              width: '30%',
+              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+            }}>
             R$ {editedValue}
           </Text>
         </View>
 
-        <TouchableOpacity
-          onPress={() => {
-            handleEditCard(data.id);
-          }}>
-          <Icon name="edit" size={26} color="#040fa7" />
-        </TouchableOpacity>
-        <TouchableOpacity style={{top: '2%', right: '8%'}} onPress={onPress}>
+        <TouchableOpacity style={{top: '2%', right: '27%'}} onPress={onPress}>
           <Icon name="trash-2" size={24} color="#040fa7" />
         </TouchableOpacity>
       </View>
@@ -92,7 +99,6 @@ export function Card({data, onPress}: Props) {
             />
             <TouchableOpacity
               onPress={() => {
-                console.log(editedValue, data.value);
                 setEditable(false);
                 mergeItem(data.id);
               }}>
