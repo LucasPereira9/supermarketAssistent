@@ -36,5 +36,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#fff',
     textAlign: 'center',
+    fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
   },
 });

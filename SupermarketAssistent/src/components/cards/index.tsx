@@ -51,11 +51,30 @@ export function Card({data, onPress}: Props) {
           />
         </TouchableOpacity>
         <View style={{flexDirection: 'row'}}>
-          <Text style={{color: '#000', padding: 10, width: '38%'}}>
+          <Text
+            style={{
+              color: '#000',
+              padding: 10,
+              minWidth: '38%',
+              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+            }}>
             {data.unity}
           </Text>
-          <Text style={{color: '#000', padding: 10}}>{data.amount}</Text>
-          <Text style={{color: '#000', padding: 10, width: '30%'}}>
+          <Text
+            style={{
+              color: '#000',
+              padding: 10,
+              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+            }}>
+            {data.amount}
+          </Text>
+          <Text
+            style={{
+              color: '#000',
+              padding: 10,
+              width: '30%',
+              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+            }}>
             R$ {editedValue}
           </Text>
         </View>

@@ -37,7 +37,9 @@ export default function TabContainer({
       <TouchableOpacity
         onPress={setModal}
         style={[styles.clean, {backgroundColor: bag ? '#ccc' : '#FDCC4E'}]}>
-        <Text>Finalizar compra</Text>
+        <Text style={{fontFamily: 'Literata-Italic-VariableFont_opsz,wght'}}>
+          Finalizar compra
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -56,6 +58,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#fff',
     textAlign: 'center',
+    fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
   },
   clean: {
     width: '40%',

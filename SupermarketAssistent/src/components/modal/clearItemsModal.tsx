@@ -1,7 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import Modal from 'react-native-modal';
+import LottieView from 'lottie-react-native';
+import {Modal, Portal, Button, Provider} from 'react-native-paper';
 
 const ClearModal = ({
   visible,
@@ -12,38 +13,15 @@ const ClearModal = ({
   onPressOut: () => void;
   visible: boolean;
 }) => {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
   return (
-    <Modal
-      isVisible={visible}
-      animationIn={'zoomInDown'}
-      animationOut={'zoomOutUp'}
-      animationInTiming={1000}
-      animationOutTiming={800}
-      backdropTransitionInTiming={1000}
-      backdropTransitionOutTiming={1100}
-      children={
-        <View
-          style={{
-            width: '100%',
-            height: '22%',
-            backgroundColor: '#040fa7',
-            borderRadius: 10,
-          }}>
-          <Text style={{textAlign: 'center', padding: 26, color: '#fff'}}>
-            Você está prestes a limpar sua lista de compras {'\n'}e esta ação
-            não pode ser desfeita!
-          </Text>
-          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-            <TouchableOpacity onPress={onPressOut} style={styles.button}>
-              <Text>Cancelar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onPressDelete} style={styles.button}>
-              <Text>Prosseguir</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      }
-    />
+    <>
+      <Modal visible={visible} onDismiss={onPressOut}>
+        <Text>Example Modal. Click outside this area to dismiss.</Text>
+      </Modal>
+    </>
   );
 };
 export default ClearModal;
@@ -51,10 +29,17 @@ export default ClearModal;
 const styles = StyleSheet.create({
   button: {
     backgroundColor: '#FDCC4E',
-    width: '30%',
+    minWidth: '30%',
+    padding: 6,
     height: 30,
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
   },
 });

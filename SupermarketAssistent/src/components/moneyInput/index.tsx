@@ -13,7 +13,7 @@ export default function MoneyInput({
     <>
       <MaskInput
         style={{
-          width: '16%',
+          width: '15%',
           borderBottomWidth: 1,
           borderBottomColor: '#040fa7',
           textAlign: 'center',

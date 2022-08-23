@@ -21,6 +21,7 @@ import HomeHeader from '../../components/homeHeader';
 import MoneyInput from '../../components/moneyInput';
 import InputText from '../../components/textInput';
 import TabContainer from '../../components/TabContainer';
+import LottieView from 'lottie-react-native';
 
 export default function Home() {
   const [unity, setUnity] = useState('');
@@ -98,7 +99,6 @@ export default function Home() {
     setItensContainer([]);
     setItemsInTheBag(0);
     setTotal(0);
-    setClearModal(false);
   }
   async function handleTotal() {
     try {
@@ -146,7 +146,11 @@ export default function Home() {
           width: '100%',
         }}>
         <Text />
-        <Text style={{padding: 4}}>
+        <Text
+          style={{
+            padding: 4,
+            fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+          }}>
           {itemsInTheBag === 0
             ? 'A sacola está vazia'
             : itemsInTheBag === 1
@@ -171,7 +175,7 @@ export default function Home() {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <View style={{width: '18%', right: 18}}>
+            <View style={{width: '20%', right: 18}}>
               <InputText
                 type={'default'}
                 Text={'Item'}
@@ -201,7 +205,10 @@ export default function Home() {
                 <Text
                   style={[
                     styles.selectValueInput,
-                    {backgroundColor: selectedValue ? '#040fa7' : '#FDCC4E'},
+                    {
+                      backgroundColor: selectedValue ? '#040fa7' : '#FDCC4E',
+                      fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+                    },
                   ]}>
                   Unitário {'\n'} {changePrice ? null : value}
                 </Text>
@@ -219,23 +226,42 @@ export default function Home() {
                     styles.selectValueInput,
                     {
                       backgroundColor: selectedValue ? '#FDCC4E' : '#040fa7',
+                      fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
                     },
                   ]}>
                   Multiplicado {'\n'} {changePrice ? value : result}
                 </Text>
               </TouchableOpacity>
             </SelectValue>
-
             <TouchableOpacity
-              style={{left: 50, top: 6}}
+              style={{
+                left: '98%',
+                position: 'absolute',
+                height: '82%',
+              }}
               onPress={() => {
                 empty ? null : handleMoreItens();
               }}>
-              <Icon
-                name="plus-square"
-                size={30}
-                color={empty ? '#727070' : '#040fa7'}
-              />
+              {empty ? (
+                <LottieView
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                  }}
+                  source={require('../../assets/animations/addMoreGray.json')}
+                  autoPlay
+                  loop={false}
+                />
+              ) : (
+                <LottieView
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                  }}
+                  source={require('../../assets/animations/addMore.json')}
+                  autoPlay
+                />
+              )}
             </TouchableOpacity>
           </View>
         </View>
@@ -274,6 +300,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#fff',
     textAlign: 'center',
+    fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
   },
 
   CardView: {
@@ -287,6 +314,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#fff',
     borderRadius: 4,
-    padding: 4,
+    padding: 2,
   },
 });

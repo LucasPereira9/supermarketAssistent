@@ -24,7 +24,7 @@ export const TabContainer = styled.View`
   flex-direction: row;
 `;
 export const SelectValue = styled.View`
-  width: 29%;
+  width: 31%;
   left: 30%;
   border-width: 1px;
   border-color: #040fa7;
