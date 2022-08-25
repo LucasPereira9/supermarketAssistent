@@ -11,7 +11,6 @@ import {
   Alert,
 } from 'react-native';
 import {Container, SelectValue} from './styles';
-import Icon from 'react-native-vector-icons/Feather';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {Card, CardProps} from '../../components/cards';
 import {useFocusEffect} from '@react-navigation/native';
