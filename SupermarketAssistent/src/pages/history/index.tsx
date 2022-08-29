@@ -1,14 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useState} from 'react';
-import {FlatList, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {HistoryCard, HistoryProps} from '../../components/historyCards';
+import Icon from 'react-native-vector-icons/AntDesign';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const History = () => {
   const {getItem, setItem} = useAsyncStorage('@supermarketHistory');
   const [itensContainer, setItensContainer] = useState<HistoryProps[]>([]);
+  const navigation = useNavigation();
 
   async function handleAddItem() {
     try {
@@ -35,7 +38,12 @@ const History = () => {
     }, [handleAddItem]),
   );
   return (
-    <View>
+    <View style={styles.historyContainer}>
+      <View style={styles.headerView}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Icon name="left" size={44} color="#FDCC4E" />
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={itensContainer}
         keyExtractor={item => item.id}
@@ -50,3 +58,15 @@ const History = () => {
 };
 
 export default History;
+
+const styles = StyleSheet.create({
+  historyContainer: {
+    flex: 1,
+    backgroundColor: '#040fa7',
+  },
+  headerView: {
+    height: '16%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

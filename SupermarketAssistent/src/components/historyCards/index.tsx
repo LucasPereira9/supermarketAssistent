@@ -39,19 +39,12 @@ export function HistoryCard({data, onPress}: Props) {
             borderRadius: 20,
           },
         ]}>
-        <TouchableOpacity onPress={() => handleFinished(data.id)}>
-          <Icon
-            name={finished ? 'check-square' : 'square'}
-            size={40}
-            color={finished ? '#2bff00' : '#040fa7'}
-          />
-        </TouchableOpacity>
         <View style={{flexDirection: 'row'}}>
           <Text
             style={{
               color: '#000',
               padding: 10,
-              minWidth: '38%',
+              width: '33%',
               fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
             }}>
             {data.date}
@@ -60,7 +53,7 @@ export function HistoryCard({data, onPress}: Props) {
             style={{
               color: '#000',
               padding: 10,
-              minWidth: '38%',
+              width: '30%',
               fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
             }}>
             {data.time}
@@ -71,7 +64,7 @@ export function HistoryCard({data, onPress}: Props) {
               padding: 10,
               fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
             }}>
-            {data.value}
+            R$ {data.value}
           </Text>
         </View>
 

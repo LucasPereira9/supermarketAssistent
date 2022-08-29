@@ -5,8 +5,6 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
-import MaskInput from 'react-native-mask-input';
-import Modal from 'react-native-modal';
 
 export type CardProps = {
   id: string;
@@ -17,13 +15,12 @@ export type CardProps = {
 type Props = {
   data: CardProps;
   onPress: () => void;
+  onEdit: () => void;
 };
 
-export function Card({data, onPress}: Props) {
-  const {getItem, mergeItem} = useAsyncStorage('@supermarketAssistent');
+export function Card({data, onPress, onEdit}: Props) {
+  const {getItem} = useAsyncStorage('@supermarketAssistent');
   const [finished, setFinished] = useState(false);
-  const [editable, setEditable] = useState(false);
-  const [editedValue, setEditedValue] = useState(data.value);
 
   async function handleFinished(id: string) {
     const response = await getItem();
@@ -75,38 +72,18 @@ export function Card({data, onPress}: Props) {
               width: '30%',
               fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
             }}>
-            R$ {editedValue}
+            R$ {data.value}
           </Text>
         </View>
+
+        <TouchableOpacity style={{top: '2%', right: '67%'}} onPress={onEdit}>
+          <Icon name="edit" size={24} color="#040fa7" />
+        </TouchableOpacity>
 
         <TouchableOpacity style={{top: '2%', right: '27%'}} onPress={onPress}>
           <Icon name="trash-2" size={24} color="#040fa7" />
         </TouchableOpacity>
       </View>
-
-      <Modal
-        isVisible={editable}
-        children={
-          <>
-            <MaskInput
-              placeholderTextColor={'#00000083'}
-              value={String(editedValue)}
-              keyboardType="numeric"
-              onChangeText={masked => {
-                String(setEditedValue(Number(masked)));
-              }}
-              mask={[/\d/, /\d/, '.', /\d/, /\d/]}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                setEditable(false);
-                mergeItem(data.id);
-              }}>
-              <Text style={{color: '#040fa7', fontSize: 20}}>Salvar</Text>
-            </TouchableOpacity>
-          </>
-        }
-      />
     </View>
   );
 }

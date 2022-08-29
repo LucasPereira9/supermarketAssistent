@@ -1,10 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
-import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React from 'react';
+import {
+  Alert,
+  Button,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import LottieView from 'lottie-react-native';
 import {useNavigation} from '@react-navigation/native';
 import uuid from 'uuid/v4';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 export default function TabContainer({
   Total,
@@ -20,6 +28,14 @@ export default function TabContainer({
   const navigation = useNavigation();
   const {getItem, setItem} = useAsyncStorage('@supermarketHistory');
 
+  const showToast = () => {
+    console.log('works');
+    Toast.show({
+      type: 'success',
+      text1: 'Compra Salva!',
+    });
+  };
+
   async function SavePurchase() {
     try {
       const id = uuid();
@@ -34,6 +50,7 @@ export default function TabContainer({
       const data = [NewItem, ...previousItens];
 
       await setItem(JSON.stringify(data));
+      showToast();
     } catch (error) {
       console.log(error);
       Alert.alert('deu ruim');
@@ -42,6 +59,10 @@ export default function TabContainer({
 
   return (
     <View style={styles.Container}>
+      <View style={{bottom: 640}}>
+        <Toast />
+      </View>
+
       <View style={styles.ValueContainer}>
         <Text style={[styles.headerText, {bottom: 26}]}>VALOR TOTAL: </Text>
         <Text style={[styles.headerText, {bottom: 26}]}>R$ {Total}</Text>
@@ -71,11 +92,11 @@ export default function TabContainer({
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            SavePurchase();
+            bag ? null : SavePurchase();
           }}
           style={[styles.clean, {backgroundColor: bag ? '#ccc' : '#FDCC4E'}]}>
           <Text style={{fontFamily: 'Literata-Italic-VariableFont_opsz,wght'}}>
-            Finalizar compra
+            Salvar compra
           </Text>
         </TouchableOpacity>
       </View>
