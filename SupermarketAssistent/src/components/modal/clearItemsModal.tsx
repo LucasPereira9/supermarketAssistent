@@ -71,7 +71,6 @@ const ClearModal = ({
                   textAlign: 'center',
                   padding: 26,
                   color: '#fff',
-                  fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
                 }}>
                 Você está prestes a limpar sua lista de compras {'\n'}e esta
                 ação não pode ser desfeita!
@@ -79,12 +78,7 @@ const ClearModal = ({
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                 <TouchableOpacity onPress={onPressOut} style={styles.button}>
-                  <Text
-                    style={{
-                      fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
-                    }}>
-                    Cancelar
-                  </Text>
+                  <Text>Cancelar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
@@ -96,12 +90,7 @@ const ClearModal = ({
                     }, 6200);
                   }}
                   style={styles.button}>
-                  <Text
-                    style={{
-                      fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
-                    }}>
-                    Prosseguir
-                  </Text>
+                  <Text>Prosseguir</Text>
                 </TouchableOpacity>
               </View>
             </>

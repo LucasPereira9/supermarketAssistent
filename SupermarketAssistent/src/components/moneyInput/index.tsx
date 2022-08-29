@@ -5,13 +5,16 @@ import MaskInput from 'react-native-mask-input';
 export default function MoneyInput({
   value,
   seted,
+  focus,
 }: {
+  focus: boolean;
   value: string;
   seted: Function;
 }) {
   return (
     <>
       <MaskInput
+        autoFocus={focus}
         style={{
           width: '15%',
           borderBottomWidth: 1,

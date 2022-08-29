@@ -32,3 +32,8 @@ export const SelectValue = styled.View`
   justify-content: center;
   align-items: center;
 `;
+export const EmptyView = styled.View`
+  height: 35%;
+  align-items: center;
+  top: 60px;
+`;

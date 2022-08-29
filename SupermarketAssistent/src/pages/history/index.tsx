@@ -3,7 +3,7 @@
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {HistoryCard, HistoryProps} from '../../components/historyCards';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -44,15 +44,27 @@ const History = () => {
           <Icon name="left" size={44} color="#FDCC4E" />
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={itensContainer}
-        keyExtractor={item => item.id}
-        style={{minWidth: '40%', minHeight: '20%'}}
-        contentContainerStyle={{minWidth: '40%', minHeight: '20%'}}
-        renderItem={({item}) => (
-          <HistoryCard data={item} onPress={() => handleRemove(item.id)} />
-        )}
-      />
+      {itensContainer.length === 0 ? (
+        <View
+          style={{
+            height: '30%',
+            justifyContent: 'center',
+            alignContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={{color: '#FDCC4E'}}>Nenhum registro no histórico</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={itensContainer}
+          keyExtractor={item => item.id}
+          style={{minWidth: '40%', minHeight: '20%'}}
+          contentContainerStyle={{minWidth: '40%', minHeight: '20%'}}
+          renderItem={({item}) => (
+            <HistoryCard data={item} onPress={() => handleRemove(item.id)} />
+          )}
+        />
+      )}
     </View>
   );
 };
