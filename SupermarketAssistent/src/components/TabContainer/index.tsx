@@ -1,7 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  Button,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import LottieView from 'lottie-react-native';
+import {useNavigation} from '@react-navigation/native';
+import uuid from 'uuid/v4';
+import {useAsyncStorage} from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 export default function TabContainer({
   Total,
@@ -14,33 +25,81 @@ export default function TabContainer({
   bag: boolean;
   setModal: () => void;
 }) {
+  const navigation = useNavigation();
+  const {getItem, setItem} = useAsyncStorage('@supermarketHistory');
+
+  const showToast = () => {
+    console.log('works');
+    Toast.show({
+      type: 'success',
+      text1: 'Compra Salva!',
+    });
+  };
+
+  async function SavePurchase() {
+    try {
+      const id = uuid();
+      const NewItem = {
+        id,
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString(),
+        value: Total,
+      };
+      const response = await getItem();
+      const previousItens = response ? JSON.parse(response) : [];
+      const data = [NewItem, ...previousItens];
+
+      await setItem(JSON.stringify(data));
+      showToast();
+    } catch (error) {
+      console.log(error);
+      Alert.alert('deu ruim');
+    }
+  }
+
   return (
     <View style={styles.Container}>
-      <Text style={[styles.headerText, {bottom: 26}]}>VALOR TOTAL: </Text>
-      <Text style={[styles.headerText, {bottom: 26}]}>R$ {Total}</Text>
-      <TouchableOpacity
-        onPress={setTotal}
-        style={{
-          maxHeight: '40%',
-          bottom: 20,
-        }}>
-        <LottieView
-          style={{
-            height: '78%',
-            left: 5,
-          }}
-          source={require('../../assets/animations/reload.json')}
-          autoPlay
-        />
-      </TouchableOpacity>
+      <View style={{bottom: 640}}>
+        <Toast />
+      </View>
 
-      <TouchableOpacity
-        onPress={setModal}
-        style={[styles.clean, {backgroundColor: bag ? '#ccc' : '#FDCC4E'}]}>
-        <Text style={{fontFamily: 'Literata-Italic-VariableFont_opsz,wght'}}>
-          Finalizar compra
-        </Text>
-      </TouchableOpacity>
+      <View style={styles.ValueContainer}>
+        <Text style={[styles.headerText, {bottom: 26}]}>VALOR TOTAL: </Text>
+        <Text style={[styles.headerText, {bottom: 26}]}>R$ {Total}</Text>
+        <TouchableOpacity
+          onPress={setTotal}
+          style={{
+            maxHeight: '40%',
+            bottom: 20,
+          }}>
+          <LottieView
+            style={{
+              height: 26,
+              left: 3,
+            }}
+            source={require('../../assets/animations/reload.json')}
+            autoPlay
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.ButtonsView}>
+        <TouchableOpacity
+          onPress={setModal}
+          style={[styles.clean, {backgroundColor: bag ? '#ccc' : '#FDCC4E'}]}>
+          <Text style={{fontFamily: 'Literata-Italic-VariableFont_opsz,wght'}}>
+            Limpar Sacola
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            bag ? null : SavePurchase();
+          }}
+          style={[styles.clean, {backgroundColor: bag ? '#ccc' : '#FDCC4E'}]}>
+          <Text style={{fontFamily: 'Literata-Italic-VariableFont_opsz,wght'}}>
+            Salvar compra
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -52,7 +111,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#040fa7',
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row',
   },
   headerText: {
     fontSize: 24,
@@ -61,12 +119,19 @@ const styles = StyleSheet.create({
     fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
   },
   clean: {
-    width: '40%',
-    height: '30%',
-    position: 'absolute',
-    bottom: 19,
+    width: '34%',
+    margin: 10,
+    height: '62%',
+    position: 'relative',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
+  },
+  ButtonsView: {
+    flexDirection: 'row',
+  },
+  ValueContainer: {
+    flexDirection: 'row',
+    top: 26,
   },
 });

@@ -6,26 +6,25 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 
-export type CardProps = {
+export type HistoryProps = {
   id: string;
-  unity: string;
-  value: number;
-  amount: number;
+  date: string;
+  value: string;
+  time: string;
 };
 type Props = {
-  data: CardProps;
+  data: HistoryProps;
   onPress: () => void;
-  onEdit: () => void;
 };
 
-export function Card({data, onPress, onEdit}: Props) {
+export function HistoryCard({data, onPress}: Props) {
   const {getItem} = useAsyncStorage('@supermarketAssistent');
   const [finished, setFinished] = useState(false);
 
   async function handleFinished(id: string) {
     const response = await getItem();
     const previousItens = response ? JSON.parse(response) : [];
-    const data = previousItens.filter((item: CardProps) => item.id !== id);
+    const data = previousItens.filter((item: HistoryProps) => item.id !== id);
     setFinished(!finished);
   }
 
@@ -40,30 +39,15 @@ export function Card({data, onPress, onEdit}: Props) {
             borderRadius: 20,
           },
         ]}>
-        <TouchableOpacity onPress={() => handleFinished(data.id)}>
-          <Icon
-            name={finished ? 'check-square' : 'square'}
-            size={40}
-            color={finished ? '#2bff00' : '#040fa7'}
-          />
-        </TouchableOpacity>
         <View style={{flexDirection: 'row'}}>
           <Text
             style={{
               color: '#000',
               padding: 10,
-              minWidth: '38%',
+              width: '33%',
               fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
             }}>
-            {data.unity}
-          </Text>
-          <Text
-            style={{
-              color: '#000',
-              padding: 10,
-              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
-            }}>
-            {data.amount}
+            {data.date}
           </Text>
           <Text
             style={{
@@ -72,13 +56,17 @@ export function Card({data, onPress, onEdit}: Props) {
               width: '30%',
               fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
             }}>
+            {data.time}
+          </Text>
+          <Text
+            style={{
+              color: '#000',
+              padding: 10,
+              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+            }}>
             R$ {data.value}
           </Text>
         </View>
-
-        <TouchableOpacity style={{top: '2%', right: '67%'}} onPress={onEdit}>
-          <Icon name="edit" size={24} color="#040fa7" />
-        </TouchableOpacity>
 
         <TouchableOpacity style={{top: '2%', right: '27%'}} onPress={onPress}>
           <Icon name="trash-2" size={24} color="#040fa7" />

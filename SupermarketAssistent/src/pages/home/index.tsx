@@ -11,7 +11,6 @@ import {
   Alert,
 } from 'react-native';
 import {Container, SelectValue} from './styles';
-import Icon from 'react-native-vector-icons/Feather';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {Card, CardProps} from '../../components/cards';
 import {useFocusEffect} from '@react-navigation/native';
@@ -35,7 +34,7 @@ export default function Home() {
   const [selectedValue, setSelectedValue] = useState(true);
   const [changePrice, setChangePrice] = useState(false);
 
-  const emptyBag = itemsInTheBag < 2;
+  const emptyBag = itemsInTheBag === 0;
   const empty =
     unity === '' || value === '' || value.length < 5 || amount === '';
 
@@ -91,6 +90,18 @@ export default function Home() {
     const data = previousItens.filter((item: CardProps) => item.id !== id);
     setItem(JSON.stringify(data));
     setItensContainer(data);
+    handleTotal();
+  }
+
+  async function handleEdit(id: string) {
+    const response = await getItem();
+    const previousItens = response ? JSON.parse(response) : [];
+    const data = previousItens.filter((item: CardProps) => item.id === id);
+    const goEdit = previousItens.filter((item: CardProps) => item.id !== id);
+    setUnity(data[0].unity);
+    setValue(data[0].value);
+    setAmount(data[0].amount);
+    setItem(JSON.stringify(goEdit));
     handleTotal();
   }
 
@@ -273,7 +284,11 @@ export default function Home() {
         style={{minWidth: '40%', minHeight: '20%'}}
         contentContainerStyle={{minWidth: '40%', minHeight: '20%'}}
         renderItem={({item}) => (
-          <Card data={item} onPress={() => handleRemove(item.id)} />
+          <Card
+            data={item}
+            onEdit={() => handleEdit(item.id)}
+            onPress={() => handleRemove(item.id)}
+          />
         )}
       />
 

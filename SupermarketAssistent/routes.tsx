@@ -3,6 +3,7 @@ import React from 'react';
 import home from './src/pages/home/index';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import History from './src/pages/history';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ export default function Routes() {
           screenOptions={{headerShown: false}}
           initialRouteName={'home'}>
           <Stack.Screen name="home" component={home} />
+          <Stack.Screen name="history" component={History} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
