@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import MyAppText from '../myAppText/text';
 
 export default function HomeHeader() {
   const navigation = useNavigation();
@@ -12,15 +13,16 @@ export default function HomeHeader() {
           style={styles.clientPhoto}
           source={require('../../assets/Lucas_bit.png')}
         />
-        <Text style={styles.headerText}>
-          LISTA {'\n'} DE {'\n'} COMPRAS
-        </Text>
+        <MyAppText
+          styling={styles.headerText}
+          textContent={'LISTA \n DE \n COMPRAS'}
+        />
       </View>
       <View>
         <TouchableOpacity
           onPress={() => navigation.navigate('history')}
           style={styles.historyButton}>
-          <Text>Histórico de compras</Text>
+          <MyAppText styling={''} textContent="Histórico de compras" />
         </TouchableOpacity>
       </View>
     </>
@@ -48,7 +50,6 @@ const styles = StyleSheet.create({
     fontSize: 21,
     color: '#fff',
     textAlign: 'center',
-    fontFamily: 'RobotoSlab-VariableFont_wght',
   },
   historyButton: {
     position: 'absolute',

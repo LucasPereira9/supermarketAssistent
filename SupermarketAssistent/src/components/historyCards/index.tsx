@@ -52,7 +52,13 @@ export function HistoryCard({data, onPress}: Props) {
                 maxWidth: '70%',
               },
             ]}>
-            <Text style={{fontWeight: 'bold'}}>Comentário:</Text> {data.Comment}
+            <Text
+              style={{
+                fontWeight: 'bold',
+              }}>
+              Comentário: {'\n'}
+            </Text>
+            {data.Comment}
           </Text>
         </View>
         <TouchableOpacity onPress={onPress} style={{top: 55, right: 6}}>
@@ -76,5 +82,6 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#000',
+    fontFamily: 'RobotoSlab-VariableFont_wght',
   },
 });

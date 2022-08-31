@@ -5,6 +5,7 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
+import MyAppText from '../myAppText/text';
 
 export type CardProps = {
   id: string;
@@ -48,33 +49,32 @@ export function Card({data, onPress, onEdit}: Props) {
           />
         </TouchableOpacity>
         <View style={{flexDirection: 'row'}}>
-          <Text
-            style={{
+          <MyAppText
+            styling={{
               color: '#000',
               padding: 10,
               minWidth: '38%',
               maxWidth: '50%',
-              fontFamily: 'RobotoSlab-VariableFont_wght',
-            }}>
-            {data.unity}
-          </Text>
-          <Text
-            style={{
+            }}
+            textContent={data.unity}
+          />
+
+          <MyAppText
+            styling={{
               color: '#000',
               padding: 10,
-              fontFamily: 'RobotoSlab-VariableFont_wght',
-            }}>
-            {data.amount}
-          </Text>
-          <Text
-            style={{
+            }}
+            textContent={String(data.amount)}
+          />
+
+          <MyAppText
+            styling={{
               color: '#000',
               padding: 10,
               width: '30%',
-              fontFamily: 'RobotoSlab-VariableFont_wght',
-            }}>
-            R$ {data.value}
-          </Text>
+            }}
+            textContent={String(`R$ ${data.value}`)}
+          />
         </View>
 
         <TouchableOpacity style={{top: '2%', right: '67%'}} onPress={onEdit}>

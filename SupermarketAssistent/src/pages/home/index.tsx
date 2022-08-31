@@ -25,6 +25,7 @@ import LottieView from 'lottie-react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import Toast from 'react-native-toast-message';
+import MyAppText from '../../components/myAppText/text';
 
 export default function Home() {
   const [unity, setUnity] = useState('');
@@ -194,17 +195,16 @@ export default function Home() {
           />
         </View>
 
-        <Text
-          style={{
-            padding: 4,
-            fontFamily: 'RobotoSlab-VariableFont_wght',
-          }}>
-          {itemsInTheBag === 0
-            ? ''
-            : itemsInTheBag === 1
-            ? `${itemsInTheBag} item no carrinho`
-            : `${itemsInTheBag} itens no carrinho`}
-        </Text>
+        <MyAppText
+          styling={{color: '#000000', padding: 4}}
+          textContent={
+            itemsInTheBag === 0
+              ? ''
+              : itemsInTheBag === 1
+              ? `${itemsInTheBag} item no carrinho`
+              : `${itemsInTheBag} itens no carrinho`
+          }
+        />
       </View>
       <View style={styles.CardView}>
         <View
@@ -317,8 +317,11 @@ export default function Home() {
       </View>
       {emptyBag ? (
         <EmptyView>
-          <Text style={styles.emptyBagText}>Sacola Vazia</Text>
-          <Text style={styles.emptyBagText}>Já possui itens salvos?</Text>
+          <MyAppText styling={styles.emptyBagText} textContent="Sacola Vazia" />
+          <MyAppText
+            styling={styles.emptyBagText}
+            textContent="Já possui itens salvos?"
+          />
           <TouchableOpacity
             onPress={() => {
               setLoading(true);
@@ -338,7 +341,7 @@ export default function Home() {
                 autoPlay
               />
             ) : (
-              <Text>Carregar itens</Text>
+              <MyAppText styling={''} textContent="Carregar itens" />
             )}
           </TouchableOpacity>
         </EmptyView>
@@ -404,7 +407,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#fff',
     borderRadius: 4,
-    padding: 2,
+    padding: 1.8,
   },
   moreItensButton: {
     width: 120,

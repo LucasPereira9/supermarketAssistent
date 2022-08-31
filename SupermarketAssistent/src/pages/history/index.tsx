@@ -7,6 +7,7 @@ import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {HistoryCard, HistoryProps} from '../../components/historyCards';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import MyAppText from '../../components/myAppText/text';
 
 const History = () => {
   const {getItem, setItem} = useAsyncStorage('@supermarketHistory');
@@ -52,7 +53,10 @@ const History = () => {
             alignContent: 'center',
             alignItems: 'center',
           }}>
-          <Text style={{color: '#FDCC4E'}}>Nenhum registro no histórico</Text>
+          <MyAppText
+            styling={{color: '#FDCC4E'}}
+            textContent="Nenhum registro no histórico"
+          />
         </View>
       ) : (
         <FlatList

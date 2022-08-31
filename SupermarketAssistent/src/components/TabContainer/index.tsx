@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import MyAppText from '../myAppText/text';
 
 export default function TabContainer({
   Total,
@@ -16,25 +17,27 @@ export default function TabContainer({
   return (
     <View style={styles.Container}>
       <View style={styles.ValueContainer}>
-        <Text style={[styles.headerText, {bottom: 26}]}>VALOR TOTAL: </Text>
-        <Text style={[styles.headerText, {bottom: 26}]}>R$ {Total}</Text>
+        <MyAppText
+          styling={[styles.headerText, {bottom: 26}]}
+          textContent="Valor Total: "
+        />
+        <MyAppText
+          styling={[styles.headerText, {bottom: 26}]}
+          textContent={`R$ ${Total}`}
+        />
       </View>
       <View style={styles.ButtonsView}>
         <TouchableOpacity
           onPress={setModal}
           style={[styles.clean, {backgroundColor: bag ? '#ccc' : '#FDCC4E'}]}>
-          <Text style={{fontFamily: 'RobotoSlab-VariableFont_wght'}}>
-            Limpar carrinho
-          </Text>
+          <MyAppText styling={''} textContent="Limpar carrinho" />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             bag ? null : setSaveModal();
           }}
           style={[styles.clean, {backgroundColor: bag ? '#ccc' : '#FDCC4E'}]}>
-          <Text style={{fontFamily: 'RobotoSlab-VariableFont_wght'}}>
-            Salvar compra
-          </Text>
+          <MyAppText styling={''} textContent="Salvar compra" />
         </TouchableOpacity>
       </View>
     </View>

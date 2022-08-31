@@ -1,17 +1,16 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
   Keyboard,
-  Alert,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {SavePurchase} from '../../hooks/savePurchase';
 import LottieView from 'lottie-react-native';
+import MyAppText from '../myAppText/text';
 
 const SaveModal = ({
   visible,
@@ -52,14 +51,11 @@ const SaveModal = ({
             backgroundColor: '#040fa7',
             borderRadius: 10,
           }}>
-          <Text
-            style={{
-              textAlign: 'center',
-              padding: 26,
-              color: '#fff',
-            }}>
-            Valor da compra R$ {TotalValue}
-          </Text>
+          <MyAppText
+            styling={{textAlign: 'center', padding: 26, color: '#fff'}}
+            textContent={`Valor da compra R$ ${TotalValue}`}
+          />
+
           <TextInput
             style={styles.inputContainer}
             value={inputValue}
@@ -76,7 +72,7 @@ const SaveModal = ({
               justifyContent: 'space-around',
             }}>
             <TouchableOpacity onPress={onPressOut} style={styles.button}>
-              <Text>Cancelar</Text>
+              <MyAppText styling={''} textContent="Voltar" />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
@@ -101,7 +97,7 @@ const SaveModal = ({
                   autoPlay
                 />
               ) : (
-                <Text>Salvar</Text>
+                <MyAppText styling={''} textContent="Salvar" />
               )}
             </TouchableOpacity>
           </View>

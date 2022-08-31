@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Modal from 'react-native-modal';
 import LottieView from 'lottie-react-native';
+import MyAppText from '../myAppText/text';
 
 const ClearModal = ({
   visible,
@@ -56,29 +57,22 @@ const ClearModal = ({
 
                   onPressOut();
                 }}>
-                <Text
-                  style={{
-                    fontFamily: 'RobotoSlab-VariableFont_wght',
-                  }}>
-                  Voltar
-                </Text>
+                <MyAppText styling={''} textContent="Voltar" />
               </TouchableOpacity>
             </View>
           ) : (
             <>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  padding: 26,
-                  color: '#fff',
-                }}>
-                Você está prestes a limpar sua lista de compras {'\n'}e esta
-                ação não pode ser desfeita!
-              </Text>
+              <MyAppText
+                styling={{textAlign: 'center', padding: 26, color: '#fff'}}
+                textContent={
+                  'Você está prestes a limpar sua lista de compras e esta ação não pode ser desfeita!'
+                }
+              />
+
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                 <TouchableOpacity onPress={onPressOut} style={styles.button}>
-                  <Text>Cancelar</Text>
+                  <MyAppText styling={''} textContent="Cancelar" />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
@@ -90,7 +84,7 @@ const ClearModal = ({
                     }, 6200);
                   }}
                   style={styles.button}>
-                  <Text>Prosseguir</Text>
+                  <MyAppText styling={''} textContent="Prosseguir" />
                 </TouchableOpacity>
               </View>
             </>
