@@ -25,48 +25,37 @@ export function HistoryCard({data, onPress}: Props) {
           styles.CardView,
           {
             backgroundColor: '#FDCC4E',
-            width: '100%',
+            flexDirection: 'row',
+            minHeight: 150,
             borderRadius: 20,
           },
         ]}>
-        <View style={{flexDirection: 'row'}}>
-          <Text
-            style={{
-              color: '#000',
-              padding: 10,
-              width: '33%',
-              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
-            }}>
-            {data.date}
+        <View style={styles.littleContainers}>
+          <Text style={styles.text}>
+            <Text style={{fontWeight: 'bold'}}>Valor:</Text> R$ {data.value}
           </Text>
-          <Text
-            style={{
-              color: '#000',
-              padding: 10,
-              width: '30%',
-              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
-            }}>
-            {data.time}
+          <Text style={styles.text}>
+            <Text style={{fontWeight: 'bold'}}>Data:</Text> {data.date}
           </Text>
-          <Text
-            style={{
-              color: '#000',
-              padding: 10,
-              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
-            }}>
-            R$ {data.value} {'\n'}
-          </Text>
-          <Text
-            style={{
-              color: '#000',
-              padding: 10,
-              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
-            }}>
-            {data.Comment}
+
+          <Text style={styles.text}>
+            <Text style={{fontWeight: 'bold'}}>Horário:</Text> {data.time}
           </Text>
         </View>
-
-        <TouchableOpacity style={{top: '2%', right: '27%'}} onPress={onPress}>
+        <View
+          style={[styles.littleContainers, {maxWidth: '70%', minWidth: '45%'}]}>
+          <Text
+            style={[
+              styles.text,
+              {
+                minWidth: '50%',
+                maxWidth: '70%',
+              },
+            ]}>
+            <Text style={{fontWeight: 'bold'}}>Comentário:</Text> {data.Comment}
+          </Text>
+        </View>
+        <TouchableOpacity onPress={onPress} style={{top: 55, right: 6}}>
           <Icon name="trash-2" size={24} color="#040fa7" />
         </TouchableOpacity>
       </View>
@@ -78,7 +67,14 @@ const styles = StyleSheet.create({
   CardView: {
     minWidth: '80%',
     padding: 10,
-    flexDirection: 'row',
     justifyContent: 'center',
+  },
+  littleContainers: {
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    margin: 10,
+  },
+  text: {
+    color: '#000',
   },
 });

@@ -23,7 +23,7 @@ export default function TabContainer({
         <TouchableOpacity
           onPress={setModal}
           style={[styles.clean, {backgroundColor: bag ? '#ccc' : '#FDCC4E'}]}>
-          <Text style={{fontFamily: 'Literata-Italic-VariableFont_opsz,wght'}}>
+          <Text style={{fontFamily: 'RobotoSlab-VariableFont_wght'}}>
             Limpar carrinho
           </Text>
         </TouchableOpacity>
@@ -32,7 +32,7 @@ export default function TabContainer({
             bag ? null : setSaveModal();
           }}
           style={[styles.clean, {backgroundColor: bag ? '#ccc' : '#FDCC4E'}]}>
-          <Text style={{fontFamily: 'Literata-Italic-VariableFont_opsz,wght'}}>
+          <Text style={{fontFamily: 'RobotoSlab-VariableFont_wght'}}>
             Salvar compra
           </Text>
         </TouchableOpacity>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#fff',
     textAlign: 'center',
-    fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+    fontFamily: 'RobotoSlab-VariableFont_wght',
   },
   clean: {
     width: '34%',

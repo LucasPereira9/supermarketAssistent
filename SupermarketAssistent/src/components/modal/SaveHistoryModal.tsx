@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {SavePurchase} from '../../hooks/savePurchase';
-import KeyboardListener from 'react-native-keyboard-listener';
+import LottieView from 'lottie-react-native';
 
 const SaveModal = ({
   visible,
@@ -30,6 +30,8 @@ const SaveModal = ({
   visible: boolean;
 }) => {
   const [height, setHeight] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   Keyboard.addListener('keyboardDidShow', () => setHeight(true));
   Keyboard.addListener('keyboardDidHide', () => setHeight(false));
 
@@ -78,6 +80,8 @@ const SaveModal = ({
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
+                setLoading(true);
+                Keyboard.dismiss();
                 setTimeout(() => {
                   onPressOut();
                   SavePurchase({
@@ -85,11 +89,20 @@ const SaveModal = ({
                     Comment: inputValue,
                     SuccessMessage: ToastSms,
                   });
+                  setLoading(false);
                   setComment('');
                 }, 2000);
               }}
               style={styles.button}>
-              <Text>Salvar</Text>
+              {loading ? (
+                <LottieView
+                  style={{width: '90%'}}
+                  source={require('../../assets/animations/insiderLoading.json')}
+                  autoPlay
+                />
+              ) : (
+                <Text>Salvar</Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>

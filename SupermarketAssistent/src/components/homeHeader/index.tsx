@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     fontSize: 21,
     color: '#fff',
     textAlign: 'center',
-    fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+    fontFamily: 'RobotoSlab-VariableFont_wght',
   },
   historyButton: {
     position: 'absolute',

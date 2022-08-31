@@ -53,7 +53,8 @@ export function Card({data, onPress, onEdit}: Props) {
               color: '#000',
               padding: 10,
               minWidth: '38%',
-              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+              maxWidth: '50%',
+              fontFamily: 'RobotoSlab-VariableFont_wght',
             }}>
             {data.unity}
           </Text>
@@ -61,7 +62,7 @@ export function Card({data, onPress, onEdit}: Props) {
             style={{
               color: '#000',
               padding: 10,
-              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+              fontFamily: 'RobotoSlab-VariableFont_wght',
             }}>
             {data.amount}
           </Text>
@@ -70,7 +71,7 @@ export function Card({data, onPress, onEdit}: Props) {
               color: '#000',
               padding: 10,
               width: '30%',
-              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+              fontFamily: 'RobotoSlab-VariableFont_wght',
             }}>
             R$ {data.value}
           </Text>

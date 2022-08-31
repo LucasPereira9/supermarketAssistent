@@ -58,7 +58,7 @@ const ClearModal = ({
                 }}>
                 <Text
                   style={{
-                    fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+                    fontFamily: 'RobotoSlab-VariableFont_wght',
                   }}>
                   Voltar
                 </Text>

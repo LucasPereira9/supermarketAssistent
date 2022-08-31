@@ -9,6 +9,7 @@ import {
   FlatList,
   View,
   Alert,
+  Keyboard,
 } from 'react-native';
 import {Container, SelectValue, EmptyView} from './styles';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
@@ -196,7 +197,7 @@ export default function Home() {
         <Text
           style={{
             padding: 4,
-            fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+            fontFamily: 'RobotoSlab-VariableFont_wght',
           }}>
           {itemsInTheBag === 0
             ? ''
@@ -254,7 +255,7 @@ export default function Home() {
                     styles.selectValueInput,
                     {
                       backgroundColor: selectedValue ? '#040fa7' : '#FDCC4E',
-                      fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+                      fontFamily: 'RobotoSlab-VariableFont_wght',
                     },
                   ]}>
                   Unitário {'\n'} {changePrice ? null : value}
@@ -273,7 +274,7 @@ export default function Home() {
                     styles.selectValueInput,
                     {
                       backgroundColor: selectedValue ? '#FDCC4E' : '#040fa7',
-                      fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+                      fontFamily: 'RobotoSlab-VariableFont_wght',
                     },
                   ]}>
                   Multiplicado {'\n'} {changePrice ? value : result}
@@ -287,6 +288,7 @@ export default function Home() {
                 height: '82%',
               }}
               onPress={() => {
+                Keyboard.dismiss();
                 empty ? null : handleMoreItens();
               }}>
               {empty ? (
@@ -388,7 +390,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#fff',
     textAlign: 'center',
-    fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+    fontFamily: 'RobotoSlab-VariableFont_wght',
   },
 
   CardView: {
