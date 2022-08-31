@@ -1,20 +1,38 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  Keyboard,
+  Alert,
+} from 'react-native';
 import Modal from 'react-native-modal';
-import LottieView from 'lottie-react-native';
+import {SavePurchase} from '../../hooks/savePurchase';
+import KeyboardListener from 'react-native-keyboard-listener';
 
 const SaveModal = ({
   visible,
+  inputValue,
   onPressOut,
-  onPressDelete,
+  TotalValue,
+  setComment,
+  ToastSms,
 }: {
+  ToastSms: () => void;
+  setComment: Function;
+  inputValue: string;
+  TotalValue: number;
   onPressDelete: () => void;
   onPressOut: () => void;
   visible: boolean;
 }) => {
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [height, setHeight] = useState(false);
+  Keyboard.addListener('keyboardDidShow', () => setHeight(true));
+  Keyboard.addListener('keyboardDidHide', () => setHeight(false));
+
   return (
     <Modal
       isVisible={visible}
@@ -28,73 +46,52 @@ const SaveModal = ({
         <View
           style={{
             width: '100%',
-            minHeight: '20%',
+            minHeight: height ? '44%' : '27%',
             backgroundColor: '#040fa7',
             borderRadius: 10,
           }}>
-          {loading ? (
-            <View style={styles.lottieViews}>
-              <LottieView
-                source={require('../../assets/animations/shopping-cart.json')}
-                autoPlay
-              />
-            </View>
-          ) : success ? (
-            <View style={styles.lottieViews}>
-              <LottieView
-                style={{bottom: '6%', width: '40%'}}
-                source={require('../../assets/animations/success.json')}
-                autoPlay
-                loop={false}
-              />
-              <TouchableOpacity
-                style={styles.backButton}
-                onPress={() => {
-                  setTimeout(() => {
-                    setSuccess(false);
-                  }, 3000);
+          <Text
+            style={{
+              textAlign: 'center',
+              padding: 26,
+              color: '#fff',
+            }}>
+            Valor da compra R$ {TotalValue}
+          </Text>
+          <TextInput
+            style={styles.inputContainer}
+            value={inputValue}
+            onChangeText={string => {
+              setComment(string);
+            }}
+            placeholder={'Adicionar um comentário(opcional)'}
+          />
 
+          <View
+            style={{
+              top: 30,
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+            }}>
+            <TouchableOpacity onPress={onPressOut} style={styles.button}>
+              <Text>Cancelar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setTimeout(() => {
                   onPressOut();
-                }}>
-                <Text
-                  style={{
-                    fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
-                  }}>
-                  Voltar
-                </Text>
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  padding: 26,
-                  color: '#fff',
-                }}>
-                Você está prestes a limpar sua lista de compras {'\n'}e esta
-                ação não pode ser desfeita!
-              </Text>
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                <TouchableOpacity onPress={onPressOut} style={styles.button}>
-                  <Text>Cancelar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    setLoading(true);
-                    setTimeout(() => {
-                      setSuccess(true);
-                      setLoading(false);
-                      onPressDelete();
-                    }, 6200);
-                  }}
-                  style={styles.button}>
-                  <Text>Prosseguir</Text>
-                </TouchableOpacity>
-              </View>
-            </>
-          )}
+                  SavePurchase({
+                    Total: TotalValue,
+                    Comment: inputValue,
+                    SuccessMessage: ToastSms,
+                  });
+                  setComment('');
+                }, 2000);
+              }}
+              style={styles.button}>
+              <Text>Salvar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       }
     />
@@ -125,5 +122,13 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     width: '24%',
     height: '20%',
+  },
+  inputContainer: {
+    backgroundColor: '#FDCC4E',
+    maxWidth: '80%',
+    justifyContent: 'center',
+    left: '10%',
+    textAlign: 'center',
+    borderRadius: 8,
   },
 });

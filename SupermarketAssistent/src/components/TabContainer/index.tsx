@@ -1,43 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import uuid from 'uuid/v4';
-import {useAsyncStorage} from '@react-native-async-storage/async-storage';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 export default function TabContainer({
   Total,
   bag,
   setModal,
-  SuccessMessage,
+  setSaveModal,
 }: {
-  SuccessMessage: () => void;
   Total: number;
   bag: boolean;
   setModal: () => void;
+  setSaveModal: () => void;
 }) {
-  const {getItem, setItem} = useAsyncStorage('@supermarketHistory');
-
-  async function SavePurchase() {
-    try {
-      const id = uuid();
-      const NewItem = {
-        id,
-        date: new Date().toLocaleDateString(),
-        time: new Date().toLocaleTimeString(),
-        value: Total,
-      };
-      const response = await getItem();
-      const previousItens = response ? JSON.parse(response) : [];
-      const data = [NewItem, ...previousItens];
-      SuccessMessage();
-
-      await setItem(JSON.stringify(data));
-    } catch (error) {
-      console.log(error);
-      Alert.alert('deu ruim');
-    }
-  }
-
   return (
     <View style={styles.Container}>
       <View style={styles.ValueContainer}>
@@ -54,7 +29,7 @@ export default function TabContainer({
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            bag ? null : SavePurchase();
+            bag ? null : setSaveModal();
           }}
           style={[styles.clean, {backgroundColor: bag ? '#ccc' : '#FDCC4E'}]}>
           <Text style={{fontFamily: 'Literata-Italic-VariableFont_opsz,wght'}}>

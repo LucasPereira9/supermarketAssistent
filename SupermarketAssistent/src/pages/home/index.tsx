@@ -13,7 +13,8 @@ import {
 import {Container, SelectValue, EmptyView} from './styles';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {Card, CardProps} from '../../components/cards';
-import ClearModal from '../../components/modal/SaveHistoryModal';
+import ClearModal from '../../components/modal/clearItemsModal';
+import SaveModal from '../../components/modal/SaveHistoryModal';
 import uuid from 'uuid/v4';
 import HomeHeader from '../../components/homeHeader';
 import MoneyInput from '../../components/moneyInput';
@@ -38,6 +39,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [newData, setNewData] = useState<any>(itensContainer);
   const [focus, setFocus] = useState(false);
+  const [openedSaveModal, setOpenedSaveModal] = useState(false);
+  const [savedComment, setSavedComment] = useState('');
 
   const emptyBag = itemsInTheBag === 0;
   const empty =
@@ -354,14 +357,25 @@ export default function Home() {
       )}
       <TabContainer
         Total={total}
-        SuccessMessage={() => showToast()}
         bag={emptyBag}
         setModal={() => (emptyBag ? null : setClearModal(true))}
+        setSaveModal={() => (emptyBag ? null : setOpenedSaveModal(true))}
       />
       <ClearModal
         visible={clearmodal}
         onPressOut={() => {
           setClearModal(false);
+        }}
+        onPressDelete={() => handleRemoveAll()}
+      />
+      <SaveModal
+        ToastSms={() => showToast()}
+        inputValue={savedComment}
+        setComment={setSavedComment}
+        TotalValue={total}
+        visible={openedSaveModal}
+        onPressOut={() => {
+          setOpenedSaveModal(false);
         }}
         onPressDelete={() => handleRemoveAll()}
       />
