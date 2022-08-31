@@ -6,6 +6,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import MyAppText from '../myAppText/text';
+import theme from '../../global/styles/theme';
 
 export type CardProps = {
   id: string;
@@ -36,7 +37,7 @@ export function Card({data, onPress, onEdit}: Props) {
         style={[
           styles.CardView,
           {
-            backgroundColor: finished ? '#4dd831ae' : '#FDCC4E',
+            backgroundColor: finished ? '#4dd831ae' : theme.colors.secundary,
             width: '100%',
             borderRadius: 20,
           },
@@ -45,7 +46,7 @@ export function Card({data, onPress, onEdit}: Props) {
           <Icon
             name={finished ? 'check-square' : 'square'}
             size={40}
-            color={finished ? '#2bff00' : '#040fa7'}
+            color={finished ? '#2bff00' : theme.colors.primary}
           />
         </TouchableOpacity>
         <View style={{flexDirection: 'row'}}>
@@ -78,11 +79,11 @@ export function Card({data, onPress, onEdit}: Props) {
         </View>
 
         <TouchableOpacity style={{top: '2%', right: '67%'}} onPress={onEdit}>
-          <Icon name="edit" size={24} color="#040fa7" />
+          <Icon name="edit" size={24} color={theme.colors.primary} />
         </TouchableOpacity>
 
         <TouchableOpacity style={{top: '2%', right: '27%'}} onPress={onPress}>
-          <Icon name="trash-2" size={24} color="#040fa7" />
+          <Icon name="trash-2" size={24} color={theme.colors.primary} />
         </TouchableOpacity>
       </View>
     </View>

@@ -4,6 +4,7 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import theme from '../../global/styles/theme';
 
 export type HistoryProps = {
   id: string;
@@ -24,7 +25,7 @@ export function HistoryCard({data, onPress}: Props) {
         style={[
           styles.CardView,
           {
-            backgroundColor: '#FDCC4E',
+            backgroundColor: theme.colors.secundary,
             flexDirection: 'row',
             minHeight: 150,
             borderRadius: 20,
@@ -56,13 +57,13 @@ export function HistoryCard({data, onPress}: Props) {
               style={{
                 fontWeight: 'bold',
               }}>
-              Comentário: {'\n'}
+              Comentário {'\n'}
             </Text>
             {data.Comment}
           </Text>
         </View>
         <TouchableOpacity onPress={onPress} style={{top: 55, right: 6}}>
-          <Icon name="trash-2" size={24} color="#040fa7" />
+          <Icon name="trash-2" size={24} color={theme.colors.primary} />
         </TouchableOpacity>
       </View>
     </View>
@@ -83,5 +84,8 @@ const styles = StyleSheet.create({
   text: {
     color: '#000',
     fontFamily: 'RobotoSlab-VariableFont_wght',
+    borderBottomWidth: 1,
+    padding: 8,
+    borderBottomColor: theme.colors.primary,
   },
 });

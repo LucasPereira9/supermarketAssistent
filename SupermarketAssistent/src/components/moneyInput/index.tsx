@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import MaskInput from 'react-native-mask-input';
+import theme from '../../global/styles/theme';
 
 export default function MoneyInput({
   value,
@@ -18,7 +19,7 @@ export default function MoneyInput({
         style={{
           width: '15%',
           borderBottomWidth: 1,
-          borderBottomColor: '#040fa7',
+          borderBottomColor: theme.colors.primary,
           textAlign: 'center',
           bottom: 6,
           right: 6,

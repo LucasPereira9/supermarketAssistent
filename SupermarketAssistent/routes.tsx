@@ -4,12 +4,14 @@ import home from './src/pages/home/index';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import History from './src/pages/history';
+import {ThemeProvider} from 'styled-components';
+import theme from './src/global/styles/theme';
 
 const Stack = createStackNavigator();
 
 export default function Routes() {
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{headerShown: false}}
@@ -18,6 +20,6 @@ export default function Routes() {
           <Stack.Screen name="history" component={History} />
         </Stack.Navigator>
       </NavigationContainer>
-    </>
+    </ThemeProvider>
   );
 }

@@ -26,6 +26,7 @@ import {TextInput} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import Toast from 'react-native-toast-message';
 import MyAppText from '../../components/myAppText/text';
+import theme from '../../global/styles/theme';
 
 export default function Home() {
   const [unity, setUnity] = useState('');
@@ -174,7 +175,7 @@ export default function Home() {
 
   return (
     <Container>
-      <StatusBar backgroundColor={'#040fa7'} />
+      <StatusBar backgroundColor={theme.colors.primary} />
       <HomeHeader />
       <Toast />
       <View
@@ -185,7 +186,12 @@ export default function Home() {
           width: '100%',
         }}>
         <View style={styles.searchContainer}>
-          <Icon style={{padding: 4}} name="search" size={20} color="#040fa7" />
+          <Icon
+            style={{padding: 4}}
+            name="search"
+            size={20}
+            color={theme.colors.primary}
+          />
           <TextInput
             style={{color: '#000'}}
             placeholder="Buscar item"
@@ -212,7 +218,7 @@ export default function Home() {
             styles.CardView,
             {
               height: 135,
-              backgroundColor: '#FDCC4E',
+              backgroundColor: theme.colors.secundary,
               width: '100%',
               borderRadius: 6,
             },
@@ -254,7 +260,9 @@ export default function Home() {
                   style={[
                     styles.selectValueInput,
                     {
-                      backgroundColor: selectedValue ? '#040fa7' : '#FDCC4E',
+                      backgroundColor: selectedValue
+                        ? theme.colors.primary
+                        : theme.colors.secundary,
                       fontFamily: 'RobotoSlab-VariableFont_wght',
                     },
                   ]}>
@@ -273,7 +281,9 @@ export default function Home() {
                   style={[
                     styles.selectValueInput,
                     {
-                      backgroundColor: selectedValue ? '#FDCC4E' : '#040fa7',
+                      backgroundColor: selectedValue
+                        ? theme.colors.secundary
+                        : theme.colors.primary,
                       fontFamily: 'RobotoSlab-VariableFont_wght',
                     },
                   ]}>
@@ -423,11 +433,11 @@ const styles = StyleSheet.create({
     color: '#5f5d5d',
   },
   searchContainer: {
-    backgroundColor: '#FDCC4E',
+    backgroundColor: theme.colors.secundary,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#040fa7',
+    borderColor: theme.colors.primary,
     height: '80%',
     top: 4,
     left: 12,

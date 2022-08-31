@@ -4,6 +4,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Modal from 'react-native-modal';
 import LottieView from 'lottie-react-native';
 import MyAppText from '../myAppText/text';
+import theme from '../../global/styles/theme';
 
 const ClearModal = ({
   visible,
@@ -30,7 +31,7 @@ const ClearModal = ({
           style={{
             width: '100%',
             minHeight: '20%',
-            backgroundColor: '#040fa7',
+            backgroundColor: theme.colors.primary,
             borderRadius: 10,
           }}>
           {loading ? (
@@ -98,7 +99,7 @@ export default ClearModal;
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#FDCC4E',
+    backgroundColor: theme.colors.secundary,
     width: '30%',
     height: 30,
     borderRadius: 4,
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     top: '70%',
-    backgroundColor: '#FDCC4E',
+    backgroundColor: theme.colors.secundary,
     borderRadius: 6,
     width: '24%',
     height: '20%',

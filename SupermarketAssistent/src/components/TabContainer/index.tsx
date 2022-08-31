@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import theme from '../../global/styles/theme';
 import MyAppText from '../myAppText/text';
 
 export default function TabContainer({
@@ -29,14 +30,20 @@ export default function TabContainer({
       <View style={styles.ButtonsView}>
         <TouchableOpacity
           onPress={setModal}
-          style={[styles.clean, {backgroundColor: bag ? '#ccc' : '#FDCC4E'}]}>
+          style={[
+            styles.clean,
+            {backgroundColor: bag ? '#ccc' : theme.colors.secundary},
+          ]}>
           <MyAppText styling={''} textContent="Limpar carrinho" />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             bag ? null : setSaveModal();
           }}
-          style={[styles.clean, {backgroundColor: bag ? '#ccc' : '#FDCC4E'}]}>
+          style={[
+            styles.clean,
+            {backgroundColor: bag ? '#ccc' : theme.colors.secundary},
+          ]}>
           <MyAppText styling={''} textContent="Salvar compra" />
         </TouchableOpacity>
       </View>
@@ -48,7 +55,7 @@ const styles = StyleSheet.create({
   Container: {
     minWidth: '100%',
     height: '16%',
-    backgroundColor: '#040fa7',
+    backgroundColor: theme.colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },

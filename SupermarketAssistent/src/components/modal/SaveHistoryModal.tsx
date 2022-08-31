@@ -11,6 +11,7 @@ import Modal from 'react-native-modal';
 import {SavePurchase} from '../../hooks/savePurchase';
 import LottieView from 'lottie-react-native';
 import MyAppText from '../myAppText/text';
+import theme from '../../global/styles/theme';
 
 const SaveModal = ({
   visible,
@@ -48,7 +49,7 @@ const SaveModal = ({
           style={{
             width: '100%',
             minHeight: height ? '44%' : '27%',
-            backgroundColor: '#040fa7',
+            backgroundColor: theme.colors.primary,
             borderRadius: 10,
           }}>
           <MyAppText
@@ -110,7 +111,7 @@ export default SaveModal;
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#FDCC4E',
+    backgroundColor: theme.colors.secundary,
     width: '30%',
     height: 30,
     borderRadius: 4,
@@ -127,13 +128,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     top: '70%',
-    backgroundColor: '#FDCC4E',
+    backgroundColor: theme.colors.secundary,
     borderRadius: 6,
     width: '24%',
     height: '20%',
   },
   inputContainer: {
-    backgroundColor: '#FDCC4E',
+    backgroundColor: theme.colors.secundary,
     maxWidth: '80%',
     justifyContent: 'center',
     left: '10%',

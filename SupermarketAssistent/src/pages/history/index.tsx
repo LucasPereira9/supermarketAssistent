@@ -3,11 +3,12 @@
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useState} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {HistoryCard, HistoryProps} from '../../components/historyCards';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import MyAppText from '../../components/myAppText/text';
+import theme from '../../global/styles/theme';
 
 const History = () => {
   const {getItem, setItem} = useAsyncStorage('@supermarketHistory');
@@ -42,7 +43,7 @@ const History = () => {
     <View style={styles.historyContainer}>
       <View style={styles.headerView}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name="left" size={44} color="#FDCC4E" />
+          <Icon name="left" size={44} color={theme.colors.secundary} />
         </TouchableOpacity>
       </View>
       {itensContainer.length === 0 ? (
@@ -54,7 +55,7 @@ const History = () => {
             alignItems: 'center',
           }}>
           <MyAppText
-            styling={{color: '#FDCC4E'}}
+            styling={{color: theme.colors.secundary}}
             textContent="Nenhum registro no histórico"
           />
         </View>
@@ -78,7 +79,7 @@ export default History;
 const styles = StyleSheet.create({
   historyContainer: {
     flex: 1,
-    backgroundColor: '#040fa7',
+    backgroundColor: theme.colors.primary,
   },
   headerView: {
     height: '16%',

@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import theme from '../../global/styles/theme';
 import MyAppText from '../myAppText/text';
 
 export default function HomeHeader() {
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
   Header: {
     width: '100%',
     height: '24%',
-    backgroundColor: '#040fa7',
+    backgroundColor: theme.colors.primary,
     justifyContent: 'space-around',
     alignItems: 'center',
     padding: '10%',
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
     width: '26%',
     height: '84%',
     borderWidth: 1,
-    borderColor: '#FDCC4E',
+    borderColor: theme.colors.secundary,
   },
   headerText: {
     minHeight: '50%',
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
-    backgroundColor: '#FDCC4E',
+    backgroundColor: theme.colors.secundary,
     width: '40%',
     margin: 10,
   },
