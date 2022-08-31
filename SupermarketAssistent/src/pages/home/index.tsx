@@ -13,7 +13,7 @@ import {
 import {Container, SelectValue, EmptyView} from './styles';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {Card, CardProps} from '../../components/cards';
-import ClearModal from '../../components/modal/clearItemsModal';
+import ClearModal from '../../components/modal/SaveHistoryModal';
 import uuid from 'uuid/v4';
 import HomeHeader from '../../components/homeHeader';
 import MoneyInput from '../../components/moneyInput';
