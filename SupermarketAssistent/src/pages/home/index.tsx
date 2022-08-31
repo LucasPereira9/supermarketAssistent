@@ -22,6 +22,7 @@ import TabContainer from '../../components/TabContainer';
 import LottieView from 'lottie-react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
+import Toast from 'react-native-toast-message';
 
 export default function Home() {
   const [unity, setUnity] = useState('');
@@ -36,7 +37,7 @@ export default function Home() {
   const [changePrice, setChangePrice] = useState(false);
   const [loading, setLoading] = useState(false);
   const [newData, setNewData] = useState<any>(itensContainer);
-  const [focus, setFocus] = useState(true);
+  const [focus, setFocus] = useState(false);
 
   const emptyBag = itemsInTheBag === 0;
   const empty =
@@ -49,14 +50,20 @@ export default function Home() {
   const fixed = parseFloat(String(multiply));
   let result = String(fixed).substr(0, 5);
 
+  const showToast = () => {
+    console.log('works');
+    Toast.show({
+      type: 'success',
+      text1: 'Compra Salva com sucesso!',
+    });
+  };
+
   const searchName = (input: string) => {
     let data = itensContainer;
     let searchData = data.filter(item => {
       return item.unity.toLowerCase().includes(input.toLowerCase());
     });
-    console.log(searchData);
     setNewData(searchData);
-    console.log('itens: ', newData);
   };
 
   async function handleMoreItens() {
@@ -113,6 +120,7 @@ export default function Home() {
   }
 
   async function handleEdit(id: string) {
+    setFocus(true);
     const response = await getItem();
     const previousItens = response ? JSON.parse(response) : [];
     const data = previousItens.filter((item: CardProps) => item.id === id);
@@ -121,7 +129,7 @@ export default function Home() {
     setValue(data[0].value);
     setAmount(data[0].amount);
     setItem(JSON.stringify(goEdit));
-    setFocus(true);
+
     handleTotal();
   }
 
@@ -162,9 +170,8 @@ export default function Home() {
   return (
     <Container>
       <StatusBar backgroundColor={'#040fa7'} />
-
       <HomeHeader />
-
+      <Toast />
       <View
         style={{
           justifyContent: 'space-between',
@@ -175,6 +182,7 @@ export default function Home() {
         <View style={styles.searchContainer}>
           <Icon style={{padding: 4}} name="search" size={20} color="#040fa7" />
           <TextInput
+            style={{color: '#000'}}
             placeholder="Buscar item"
             onChangeText={input => {
               searchName(input);
@@ -302,7 +310,6 @@ export default function Home() {
           </View>
         </View>
       </View>
-
       {emptyBag ? (
         <EmptyView>
           <Text style={styles.emptyBagText}>Sacola Vazia</Text>
@@ -345,14 +352,12 @@ export default function Home() {
           )}
         />
       )}
-
       <TabContainer
         Total={total}
-        setTotal={() => handleTotal()}
+        SuccessMessage={() => showToast()}
         bag={emptyBag}
         setModal={() => (emptyBag ? null : setClearModal(true))}
       />
-
       <ClearModal
         visible={clearmodal}
         onPressOut={() => {
@@ -399,6 +404,7 @@ const styles = StyleSheet.create({
     color: '#5f5d5d',
   },
   searchContainer: {
+    backgroundColor: '#FDCC4E',
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
