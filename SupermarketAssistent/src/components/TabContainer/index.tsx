@@ -1,40 +1,21 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {
-  Alert,
-  Button,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import LottieView from 'lottie-react-native';
-import {useNavigation} from '@react-navigation/native';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import uuid from 'uuid/v4';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
-import Toast from 'react-native-toast-message';
 
 export default function TabContainer({
   Total,
-  setTotal,
   bag,
   setModal,
+  SuccessMessage,
 }: {
+  SuccessMessage: () => void;
   Total: number;
-  setTotal: () => void;
   bag: boolean;
   setModal: () => void;
 }) {
-  const navigation = useNavigation();
   const {getItem, setItem} = useAsyncStorage('@supermarketHistory');
-
-  const showToast = () => {
-    console.log('works');
-    Toast.show({
-      type: 'success',
-      text1: 'Compra Salva!',
-    });
-  };
 
   async function SavePurchase() {
     try {
@@ -48,9 +29,9 @@ export default function TabContainer({
       const response = await getItem();
       const previousItens = response ? JSON.parse(response) : [];
       const data = [NewItem, ...previousItens];
+      SuccessMessage();
 
       await setItem(JSON.stringify(data));
-      showToast();
     } catch (error) {
       console.log(error);
       Alert.alert('deu ruim');
@@ -59,35 +40,16 @@ export default function TabContainer({
 
   return (
     <View style={styles.Container}>
-      <View style={{bottom: 640}}>
-        <Toast />
-      </View>
-
       <View style={styles.ValueContainer}>
         <Text style={[styles.headerText, {bottom: 26}]}>VALOR TOTAL: </Text>
         <Text style={[styles.headerText, {bottom: 26}]}>R$ {Total}</Text>
-        <TouchableOpacity
-          onPress={setTotal}
-          style={{
-            maxHeight: '40%',
-            bottom: 20,
-          }}>
-          <LottieView
-            style={{
-              height: 26,
-              left: 3,
-            }}
-            source={require('../../assets/animations/reload.json')}
-            autoPlay
-          />
-        </TouchableOpacity>
       </View>
       <View style={styles.ButtonsView}>
         <TouchableOpacity
           onPress={setModal}
           style={[styles.clean, {backgroundColor: bag ? '#ccc' : '#FDCC4E'}]}>
           <Text style={{fontFamily: 'Literata-Italic-VariableFont_opsz,wght'}}>
-            Limpar Sacola
+            Limpar carrinho
           </Text>
         </TouchableOpacity>
         <TouchableOpacity

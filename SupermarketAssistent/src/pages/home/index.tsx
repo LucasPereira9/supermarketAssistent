@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   StatusBar,
@@ -10,10 +10,9 @@ import {
   View,
   Alert,
 } from 'react-native';
-import {Container, SelectValue} from './styles';
+import {Container, SelectValue, EmptyView} from './styles';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {Card, CardProps} from '../../components/cards';
-import {useFocusEffect} from '@react-navigation/native';
 import ClearModal from '../../components/modal/clearItemsModal';
 import uuid from 'uuid/v4';
 import HomeHeader from '../../components/homeHeader';
@@ -21,6 +20,9 @@ import MoneyInput from '../../components/moneyInput';
 import InputText from '../../components/textInput';
 import TabContainer from '../../components/TabContainer';
 import LottieView from 'lottie-react-native';
+import {TextInput} from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/Feather';
+import Toast from 'react-native-toast-message';
 
 export default function Home() {
   const [unity, setUnity] = useState('');
@@ -33,6 +35,9 @@ export default function Home() {
   const [itensContainer, setItensContainer] = useState<CardProps[]>([]);
   const [selectedValue, setSelectedValue] = useState(true);
   const [changePrice, setChangePrice] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [newData, setNewData] = useState<any>(itensContainer);
+  const [focus, setFocus] = useState(false);
 
   const emptyBag = itemsInTheBag === 0;
   const empty =
@@ -44,6 +49,22 @@ export default function Home() {
   const multiply = Number(value) * Number(amount);
   const fixed = parseFloat(String(multiply));
   let result = String(fixed).substr(0, 5);
+
+  const showToast = () => {
+    console.log('works');
+    Toast.show({
+      type: 'success',
+      text1: 'Compra Salva com sucesso!',
+    });
+  };
+
+  const searchName = (input: string) => {
+    let data = itensContainer;
+    let searchData = data.filter(item => {
+      return item.unity.toLowerCase().includes(input.toLowerCase());
+    });
+    setNewData(searchData);
+  };
 
   async function handleMoreItens() {
     try {
@@ -66,6 +87,7 @@ export default function Home() {
       setAmount('1');
       setChangePrice(false);
       setSelectedValue(true);
+      handleAddItem();
     } catch (error) {
       console.log(error);
       Alert.alert('deu ruim');
@@ -78,7 +100,9 @@ export default function Home() {
 
       const data = response ? JSON.parse(response) : [];
       setItensContainer(data);
+      setNewData(data);
       setItemsInTheBag(data.length);
+      handleTotal();
     } catch (error) {
       console.log(error);
     }
@@ -90,10 +114,13 @@ export default function Home() {
     const data = previousItens.filter((item: CardProps) => item.id !== id);
     setItem(JSON.stringify(data));
     setItensContainer(data);
+    setNewData(data);
+    setItemsInTheBag(data.length);
     handleTotal();
   }
 
   async function handleEdit(id: string) {
+    setFocus(true);
     const response = await getItem();
     const previousItens = response ? JSON.parse(response) : [];
     const data = previousItens.filter((item: CardProps) => item.id === id);
@@ -102,12 +129,14 @@ export default function Home() {
     setValue(data[0].value);
     setAmount(data[0].amount);
     setItem(JSON.stringify(goEdit));
+
     handleTotal();
   }
 
   async function handleRemoveAll() {
     await removeItem();
     setItensContainer([]);
+    setNewData([]);
     setItemsInTheBag(0);
     setTotal(0);
   }
@@ -138,35 +167,39 @@ export default function Home() {
     }
   }
 
-  useFocusEffect(
-    useCallback(() => {
-      handleAddItem();
-    }, [handleAddItem]),
-  );
-
   return (
     <Container>
       <StatusBar backgroundColor={'#040fa7'} />
-
       <HomeHeader />
-
+      <Toast />
       <View
         style={{
           justifyContent: 'space-between',
           flexDirection: 'row',
+          alignItems: 'center',
           width: '100%',
         }}>
-        <Text />
+        <View style={styles.searchContainer}>
+          <Icon style={{padding: 4}} name="search" size={20} color="#040fa7" />
+          <TextInput
+            style={{color: '#000'}}
+            placeholder="Buscar item"
+            onChangeText={input => {
+              searchName(input);
+            }}
+          />
+        </View>
+
         <Text
           style={{
             padding: 4,
             fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
           }}>
           {itemsInTheBag === 0
-            ? 'A sacola está vazia'
+            ? ''
             : itemsInTheBag === 1
-            ? `${itemsInTheBag} item na sacola`
-            : `${itemsInTheBag} itens na sacola`}
+            ? `${itemsInTheBag} item no carrinho`
+            : `${itemsInTheBag} itens no carrinho`}
         </Text>
       </View>
       <View style={styles.CardView}>
@@ -195,7 +228,7 @@ export default function Home() {
               />
             </View>
 
-            <MoneyInput value={value} seted={setValue} />
+            <MoneyInput focus={focus} value={value} seted={setValue} />
 
             <View style={{width: '17%', left: 10}}>
               <InputText
@@ -277,28 +310,54 @@ export default function Home() {
           </View>
         </View>
       </View>
-
-      <FlatList
-        data={itensContainer}
-        keyExtractor={item => item.id}
-        style={{minWidth: '40%', minHeight: '20%'}}
-        contentContainerStyle={{minWidth: '40%', minHeight: '20%'}}
-        renderItem={({item}) => (
-          <Card
-            data={item}
-            onEdit={() => handleEdit(item.id)}
-            onPress={() => handleRemove(item.id)}
-          />
-        )}
-      />
-
+      {emptyBag ? (
+        <EmptyView>
+          <Text style={styles.emptyBagText}>Sacola Vazia</Text>
+          <Text style={styles.emptyBagText}>Já possui itens salvos?</Text>
+          <TouchableOpacity
+            onPress={() => {
+              setLoading(true);
+              setTimeout(() => {
+                handleAddItem();
+                setLoading(false);
+              }, 2000);
+            }}
+            style={styles.moreItensButton}>
+            {loading ? (
+              <LottieView
+                style={{
+                  width: '40%',
+                  height: '95%',
+                }}
+                source={require('../../assets/animations/moreItensLoad.json')}
+                autoPlay
+              />
+            ) : (
+              <Text>Carregar itens</Text>
+            )}
+          </TouchableOpacity>
+        </EmptyView>
+      ) : (
+        <FlatList
+          data={newData}
+          keyExtractor={item => item.id}
+          style={{minWidth: '40%', minHeight: '20%'}}
+          contentContainerStyle={{minWidth: '40%', minHeight: '20%'}}
+          renderItem={({item}) => (
+            <Card
+              data={item}
+              onEdit={() => handleEdit(item.id)}
+              onPress={() => handleRemove(item.id)}
+            />
+          )}
+        />
+      )}
       <TabContainer
         Total={total}
-        setTotal={() => handleTotal()}
+        SuccessMessage={() => showToast()}
         bag={emptyBag}
         setModal={() => (emptyBag ? null : setClearModal(true))}
       />
-
       <ClearModal
         visible={clearmodal}
         onPressOut={() => {
@@ -330,5 +389,29 @@ const styles = StyleSheet.create({
     color: '#fff',
     borderRadius: 4,
     padding: 2,
+  },
+  moreItensButton: {
+    width: 120,
+    margin: 10,
+    backgroundColor: '#f1bb32',
+    height: '12%',
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+  },
+  emptyBagText: {
+    color: '#5f5d5d',
+  },
+  searchContainer: {
+    backgroundColor: '#FDCC4E',
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#040fa7',
+    height: '80%',
+    top: 4,
+    left: 12,
+    borderRadius: 8,
   },
 });
