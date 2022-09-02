@@ -10,7 +10,11 @@ const MyAppText = ({
   styling: any;
 }) => {
   return (
-    <Text style={[styling, {fontFamily: 'RobotoSlab-VariableFont_wght'}]}>
+    <Text
+      style={[
+        styling,
+        {fontFamily: 'RobotoSlab-VariableFont_wght', textAlign: 'center'},
+      ]}>
       {textContent}
     </Text>
   );

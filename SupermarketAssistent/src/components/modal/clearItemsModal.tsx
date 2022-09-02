@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Linking, TouchableOpacity, View, Image} from 'react-native';
 import Modal from 'react-native-modal';
 import LottieView from 'lottie-react-native';
 import MyAppText from '../myAppText/text';
@@ -30,7 +30,7 @@ const ClearModal = ({
         <View
           style={{
             width: '100%',
-            minHeight: '20%',
+            minHeight: success ? '30%' : '20%',
             backgroundColor: theme.colors.primary,
             borderRadius: 10,
           }}>
@@ -44,18 +44,34 @@ const ClearModal = ({
           ) : success ? (
             <View style={styles.lottieViews}>
               <LottieView
-                style={{bottom: '6%', width: '40%'}}
+                style={{width: '60%', bottom: 20}}
                 source={require('../../assets/animations/success.json')}
                 autoPlay
                 loop={false}
               />
+              <MyAppText
+                styling={styles.successText}
+                textContent="Muito obrigado por usar o meu app!"
+              />
+              <MyAppText
+                styling={styles.successText}
+                textContent="Encontrou algum bug? entra em contato comigo clicando na imagem abaixo! valeuuu =)"
+              />
               <TouchableOpacity
-                style={styles.backButton}
+                style={styles.linkImage}
                 onPress={() => {
-                  setTimeout(() => {
-                    setSuccess(false);
-                  }, 3000);
-
+                  Linking.openURL(
+                    'https://www.linkedin.com/in/lucas-pereira-5280b9206/',
+                  );
+                }}>
+                <Image
+                  style={[styles.linkImage, {bottom: 1}]}
+                  source={require('../../assets/Lucas_bit.png')}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, {bottom: 20}]}
+                onPress={() => {
                   onPressOut();
                 }}>
                 <MyAppText styling={''} textContent="Voltar" />
@@ -107,18 +123,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   lottieViews: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  backButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    top: '70%',
-    backgroundColor: theme.colors.secundary,
-    borderRadius: 6,
-    width: '24%',
-    height: '20%',
+
+  successText: {
+    color: '#fff',
+    fontSize: 15,
+    bottom: 84,
+  },
+  linkImage: {
+    width: 90,
+    height: 80,
+    borderRadius: 62,
+    bottom: 55,
   },
 });

@@ -53,7 +53,12 @@ const SaveModal = ({
             borderRadius: 10,
           }}>
           <MyAppText
-            styling={{textAlign: 'center', padding: 26, color: '#fff'}}
+            styling={{
+              textAlign: 'center',
+              padding: 26,
+              color: '#fff',
+              fontSize: 20,
+            }}
             textContent={`Valor da compra R$ ${TotalValue}`}
           />
 

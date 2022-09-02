@@ -51,6 +51,7 @@ export function HistoryCard({data, onPress}: Props) {
               {
                 minWidth: '50%',
                 maxWidth: '70%',
+                textAlign: 'center',
               },
             ]}>
             <Text
