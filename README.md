@@ -1,5 +1,5 @@
 <p align="center">
-  <a rel="noopener" target="_blank"><img width="300" src="./src/assets/supermarketLogo.png" alt="SupermarketLogo"></a>
+  <a rel="noopener" target="_blank"><img width="300" src="./SupermarketAssistent/src/assets/supermarketLogo.png" alt="SupermarketLogo"></a>
 </p>
 
 **SupermarketAssistent**  everything you need for good control when shopping.
