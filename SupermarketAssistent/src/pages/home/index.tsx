@@ -46,8 +46,7 @@ export default function Home() {
   const [savedComment, setSavedComment] = useState('');
 
   const emptyBag = itemsInTheBag === 0;
-  const empty =
-    unity === '' || value === '' || value.length < 5 || amount === '';
+  const empty = unity === '' || value === '' || amount === '';
 
   const {getItem, setItem, removeItem} = useAsyncStorage(
     '@supermarketAssistent',
@@ -293,7 +292,7 @@ export default function Home() {
             </SelectValue>
             <TouchableOpacity
               style={{
-                left: '98%',
+                left: '94%',
                 position: 'absolute',
                 height: '82%',
               }}
@@ -370,12 +369,15 @@ export default function Home() {
           )}
         />
       )}
-      <TabContainer
-        Total={total}
-        bag={emptyBag}
-        setModal={() => (emptyBag ? null : setClearModal(true))}
-        setSaveModal={() => (emptyBag ? null : setOpenedSaveModal(true))}
-      />
+      {emptyBag ? null : (
+        <TabContainer
+          Total={total}
+          bag={emptyBag}
+          setModal={() => (emptyBag ? null : setClearModal(true))}
+          setSaveModal={() => (emptyBag ? null : setOpenedSaveModal(true))}
+        />
+      )}
+
       <ClearModal
         visible={clearmodal}
         onPressOut={() => {
@@ -417,7 +419,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#fff',
     borderRadius: 4,
-    padding: 1.8,
+    padding: 3,
   },
   moreItensButton: {
     width: 120,

@@ -2,7 +2,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import MyAppText from '../myAppText/text';

@@ -48,7 +48,7 @@ const SaveModal = ({
         <View
           style={{
             width: '100%',
-            minHeight: height ? '44%' : '27%',
+            minHeight: height ? '42%' : '28%',
             backgroundColor: theme.colors.primary,
             borderRadius: 10,
           }}>
