@@ -1,6 +1,8 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import theme from '../../global/styles/theme';
+import MyAppText from '../myAppText/text';
 
 export default function HomeHeader() {
   const navigation = useNavigation();
@@ -12,15 +14,16 @@ export default function HomeHeader() {
           style={styles.clientPhoto}
           source={require('../../assets/Lucas_bit.png')}
         />
-        <Text style={styles.headerText}>
-          LISTA {'\n'} DE {'\n'} COMPRAS
-        </Text>
+        <MyAppText
+          styling={styles.headerText}
+          textContent={'LISTA \n DE \n COMPRAS'}
+        />
       </View>
       <View>
         <TouchableOpacity
           onPress={() => navigation.navigate('history')}
           style={styles.historyButton}>
-          <Text>Histórico de compras</Text>
+          <MyAppText styling={''} textContent="Histórico de compras" />
         </TouchableOpacity>
       </View>
     </>
@@ -31,7 +34,7 @@ const styles = StyleSheet.create({
   Header: {
     width: '100%',
     height: '24%',
-    backgroundColor: '#040fa7',
+    backgroundColor: theme.colors.primary,
     justifyContent: 'space-around',
     alignItems: 'center',
     padding: '10%',
@@ -41,14 +44,13 @@ const styles = StyleSheet.create({
     width: '26%',
     height: '84%',
     borderWidth: 1,
-    borderColor: '#FDCC4E',
+    borderColor: theme.colors.secundary,
   },
   headerText: {
     minHeight: '50%',
     fontSize: 21,
     color: '#fff',
     textAlign: 'center',
-    fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
   },
   historyButton: {
     position: 'absolute',
@@ -57,7 +59,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
-    backgroundColor: '#FDCC4E',
+    backgroundColor: theme.colors.secundary,
     width: '40%',
     margin: 10,
   },

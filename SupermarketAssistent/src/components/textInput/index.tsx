@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {KeyboardTypeOptions, TextInput} from 'react-native';
+import theme from '../../global/styles/theme';
 
 export default function InputText({
   value,
@@ -18,7 +19,7 @@ export default function InputText({
       <TextInput
         style={{
           borderBottomWidth: 1,
-          borderBottomColor: '#040fa7',
+          borderBottomColor: theme.colors.primary,
           textAlign: 'center',
           bottom: 6,
           width: '100%',

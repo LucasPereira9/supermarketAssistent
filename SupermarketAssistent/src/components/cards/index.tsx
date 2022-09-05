@@ -5,6 +5,8 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
+import MyAppText from '../myAppText/text';
+import theme from '../../global/styles/theme';
 
 export type CardProps = {
   id: string;
@@ -35,7 +37,7 @@ export function Card({data, onPress, onEdit}: Props) {
         style={[
           styles.CardView,
           {
-            backgroundColor: finished ? '#4dd831ae' : '#FDCC4E',
+            backgroundColor: finished ? '#4dd831ae' : theme.colors.secundary,
             width: '100%',
             borderRadius: 20,
           },
@@ -44,44 +46,44 @@ export function Card({data, onPress, onEdit}: Props) {
           <Icon
             name={finished ? 'check-square' : 'square'}
             size={40}
-            color={finished ? '#2bff00' : '#040fa7'}
+            color={finished ? '#2bff00' : theme.colors.primary}
           />
         </TouchableOpacity>
         <View style={{flexDirection: 'row'}}>
-          <Text
-            style={{
+          <MyAppText
+            styling={{
               color: '#000',
               padding: 10,
               minWidth: '38%',
-              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
-            }}>
-            {data.unity}
-          </Text>
-          <Text
-            style={{
+              maxWidth: '50%',
+            }}
+            textContent={data.unity}
+          />
+
+          <MyAppText
+            styling={{
               color: '#000',
               padding: 10,
-              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
-            }}>
-            {data.amount}
-          </Text>
-          <Text
-            style={{
+            }}
+            textContent={String(data.amount)}
+          />
+
+          <MyAppText
+            styling={{
               color: '#000',
               padding: 10,
               width: '30%',
-              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
-            }}>
-            R$ {data.value}
-          </Text>
+            }}
+            textContent={String(`R$ ${data.value}`)}
+          />
         </View>
 
         <TouchableOpacity style={{top: '2%', right: '67%'}} onPress={onEdit}>
-          <Icon name="edit" size={24} color="#040fa7" />
+          <Icon name="edit" size={24} color={theme.colors.primary} />
         </TouchableOpacity>
 
         <TouchableOpacity style={{top: '2%', right: '27%'}} onPress={onPress}>
-          <Icon name="trash-2" size={24} color="#040fa7" />
+          <Icon name="trash-2" size={24} color={theme.colors.primary} />
         </TouchableOpacity>
       </View>
     </View>

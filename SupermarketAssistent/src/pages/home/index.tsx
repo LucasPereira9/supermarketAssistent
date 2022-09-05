@@ -9,11 +9,13 @@ import {
   FlatList,
   View,
   Alert,
+  Keyboard,
 } from 'react-native';
 import {Container, SelectValue, EmptyView} from './styles';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {Card, CardProps} from '../../components/cards';
 import ClearModal from '../../components/modal/clearItemsModal';
+import SaveModal from '../../components/modal/SaveHistoryModal';
 import uuid from 'uuid/v4';
 import HomeHeader from '../../components/homeHeader';
 import MoneyInput from '../../components/moneyInput';
@@ -23,6 +25,8 @@ import LottieView from 'lottie-react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import Toast from 'react-native-toast-message';
+import MyAppText from '../../components/myAppText/text';
+import theme from '../../global/styles/theme';
 
 export default function Home() {
   const [unity, setUnity] = useState('');
@@ -38,6 +42,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [newData, setNewData] = useState<any>(itensContainer);
   const [focus, setFocus] = useState(false);
+  const [openedSaveModal, setOpenedSaveModal] = useState(false);
+  const [savedComment, setSavedComment] = useState('');
 
   const emptyBag = itemsInTheBag === 0;
   const empty =
@@ -169,7 +175,7 @@ export default function Home() {
 
   return (
     <Container>
-      <StatusBar backgroundColor={'#040fa7'} />
+      <StatusBar backgroundColor={theme.colors.primary} />
       <HomeHeader />
       <Toast />
       <View
@@ -180,7 +186,12 @@ export default function Home() {
           width: '100%',
         }}>
         <View style={styles.searchContainer}>
-          <Icon style={{padding: 4}} name="search" size={20} color="#040fa7" />
+          <Icon
+            style={{padding: 4}}
+            name="search"
+            size={20}
+            color={theme.colors.primary}
+          />
           <TextInput
             style={{color: '#000'}}
             placeholder="Buscar item"
@@ -190,17 +201,16 @@ export default function Home() {
           />
         </View>
 
-        <Text
-          style={{
-            padding: 4,
-            fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
-          }}>
-          {itemsInTheBag === 0
-            ? ''
-            : itemsInTheBag === 1
-            ? `${itemsInTheBag} item no carrinho`
-            : `${itemsInTheBag} itens no carrinho`}
-        </Text>
+        <MyAppText
+          styling={{color: '#000000', padding: 4}}
+          textContent={
+            itemsInTheBag === 0
+              ? ''
+              : itemsInTheBag === 1
+              ? `${itemsInTheBag} item no carrinho`
+              : `${itemsInTheBag} itens no carrinho`
+          }
+        />
       </View>
       <View style={styles.CardView}>
         <View
@@ -208,7 +218,7 @@ export default function Home() {
             styles.CardView,
             {
               height: 135,
-              backgroundColor: '#FDCC4E',
+              backgroundColor: theme.colors.secundary,
               width: '100%',
               borderRadius: 6,
             },
@@ -250,8 +260,10 @@ export default function Home() {
                   style={[
                     styles.selectValueInput,
                     {
-                      backgroundColor: selectedValue ? '#040fa7' : '#FDCC4E',
-                      fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+                      backgroundColor: selectedValue
+                        ? theme.colors.primary
+                        : theme.colors.secundary,
+                      fontFamily: 'RobotoSlab-VariableFont_wght',
                     },
                   ]}>
                   Unitário {'\n'} {changePrice ? null : value}
@@ -269,8 +281,10 @@ export default function Home() {
                   style={[
                     styles.selectValueInput,
                     {
-                      backgroundColor: selectedValue ? '#FDCC4E' : '#040fa7',
-                      fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+                      backgroundColor: selectedValue
+                        ? theme.colors.secundary
+                        : theme.colors.primary,
+                      fontFamily: 'RobotoSlab-VariableFont_wght',
                     },
                   ]}>
                   Multiplicado {'\n'} {changePrice ? value : result}
@@ -284,6 +298,7 @@ export default function Home() {
                 height: '82%',
               }}
               onPress={() => {
+                Keyboard.dismiss();
                 empty ? null : handleMoreItens();
               }}>
               {empty ? (
@@ -312,8 +327,11 @@ export default function Home() {
       </View>
       {emptyBag ? (
         <EmptyView>
-          <Text style={styles.emptyBagText}>Sacola Vazia</Text>
-          <Text style={styles.emptyBagText}>Já possui itens salvos?</Text>
+          <MyAppText styling={styles.emptyBagText} textContent="Sacola Vazia" />
+          <MyAppText
+            styling={styles.emptyBagText}
+            textContent="Já possui itens salvos?"
+          />
           <TouchableOpacity
             onPress={() => {
               setLoading(true);
@@ -333,7 +351,7 @@ export default function Home() {
                 autoPlay
               />
             ) : (
-              <Text>Carregar itens</Text>
+              <MyAppText styling={''} textContent="Carregar itens" />
             )}
           </TouchableOpacity>
         </EmptyView>
@@ -354,14 +372,25 @@ export default function Home() {
       )}
       <TabContainer
         Total={total}
-        SuccessMessage={() => showToast()}
         bag={emptyBag}
         setModal={() => (emptyBag ? null : setClearModal(true))}
+        setSaveModal={() => (emptyBag ? null : setOpenedSaveModal(true))}
       />
       <ClearModal
         visible={clearmodal}
         onPressOut={() => {
           setClearModal(false);
+        }}
+        onPressDelete={() => handleRemoveAll()}
+      />
+      <SaveModal
+        ToastSms={() => showToast()}
+        inputValue={savedComment}
+        setComment={setSavedComment}
+        TotalValue={total}
+        visible={openedSaveModal}
+        onPressOut={() => {
+          setOpenedSaveModal(false);
         }}
         onPressDelete={() => handleRemoveAll()}
       />
@@ -374,7 +403,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#fff',
     textAlign: 'center',
-    fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
+    fontFamily: 'RobotoSlab-VariableFont_wght',
   },
 
   CardView: {
@@ -388,7 +417,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#fff',
     borderRadius: 4,
-    padding: 2,
+    padding: 1.8,
   },
   moreItensButton: {
     width: 120,
@@ -404,11 +433,11 @@ const styles = StyleSheet.create({
     color: '#5f5d5d',
   },
   searchContainer: {
-    backgroundColor: '#FDCC4E',
+    backgroundColor: theme.colors.secundary,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#040fa7',
+    borderColor: theme.colors.primary,
     height: '80%',
     top: 4,
     left: 12,

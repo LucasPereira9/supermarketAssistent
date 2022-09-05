@@ -1,5 +1,6 @@
 import React from 'react';
 import NumericInput from 'react-native-numeric-input';
+import theme from '../../global/styles/theme';
 
 export default function AmountInput({
   value,
@@ -22,9 +23,9 @@ export default function AmountInput({
         textColor="#000000"
         totalWidth={74}
         totalHeight={50}
-        upDownButtonsBackgroundColor="#040fa7"
-        iconStyle={{color: '#FDCC4E'}}
-        borderColor="#040fa7"
+        upDownButtonsBackgroundColor={theme.colors.primary}
+        iconStyle={{color: theme.colors.secundary}}
+        borderColor={theme.colors.primary}
       />
     </>
   );

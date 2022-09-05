@@ -1,16 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/react-in-jsx-scope */
 
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import {useAsyncStorage} from '@react-native-async-storage/async-storage';
+import theme from '../../global/styles/theme';
 
 export type HistoryProps = {
   id: string;
   date: string;
   value: string;
   time: string;
+  Comment: string;
 };
 type Props = {
   data: HistoryProps;
@@ -18,58 +19,52 @@ type Props = {
 };
 
 export function HistoryCard({data, onPress}: Props) {
-  const {getItem} = useAsyncStorage('@supermarketAssistent');
-  const [finished, setFinished] = useState(false);
-
-  async function handleFinished(id: string) {
-    const response = await getItem();
-    const previousItens = response ? JSON.parse(response) : [];
-    const data = previousItens.filter((item: HistoryProps) => item.id !== id);
-    setFinished(!finished);
-  }
-
   return (
     <View style={styles.CardView}>
       <View
         style={[
           styles.CardView,
           {
-            backgroundColor: finished ? '#4dd831ae' : '#FDCC4E',
-            width: '100%',
+            backgroundColor: theme.colors.secundary,
+            flexDirection: 'row',
+            minHeight: 150,
             borderRadius: 20,
           },
         ]}>
-        <View style={{flexDirection: 'row'}}>
-          <Text
-            style={{
-              color: '#000',
-              padding: 10,
-              width: '33%',
-              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
-            }}>
-            {data.date}
+        <View style={styles.littleContainers}>
+          <Text style={styles.text}>
+            <Text style={{fontWeight: 'bold'}}>Valor:</Text> R$ {data.value}
           </Text>
-          <Text
-            style={{
-              color: '#000',
-              padding: 10,
-              width: '30%',
-              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
-            }}>
-            {data.time}
+          <Text style={styles.text}>
+            <Text style={{fontWeight: 'bold'}}>Data:</Text> {data.date}
           </Text>
-          <Text
-            style={{
-              color: '#000',
-              padding: 10,
-              fontFamily: 'Literata-Italic-VariableFont_opsz,wght',
-            }}>
-            R$ {data.value}
+
+          <Text style={styles.text}>
+            <Text style={{fontWeight: 'bold'}}>Horário:</Text> {data.time}
           </Text>
         </View>
-
-        <TouchableOpacity style={{top: '2%', right: '27%'}} onPress={onPress}>
-          <Icon name="trash-2" size={24} color="#040fa7" />
+        <View
+          style={[styles.littleContainers, {maxWidth: '70%', minWidth: '45%'}]}>
+          <Text
+            style={[
+              styles.text,
+              {
+                minWidth: '50%',
+                maxWidth: '70%',
+                textAlign: 'center',
+              },
+            ]}>
+            <Text
+              style={{
+                fontWeight: 'bold',
+              }}>
+              Comentário {'\n'}
+            </Text>
+            {data.Comment}
+          </Text>
+        </View>
+        <TouchableOpacity onPress={onPress} style={{top: 55, right: 6}}>
+          <Icon name="trash-2" size={24} color={theme.colors.primary} />
         </TouchableOpacity>
       </View>
     </View>
@@ -80,7 +75,18 @@ const styles = StyleSheet.create({
   CardView: {
     minWidth: '80%',
     padding: 10,
-    flexDirection: 'row',
     justifyContent: 'center',
+  },
+  littleContainers: {
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    margin: 10,
+  },
+  text: {
+    color: '#000',
+    fontFamily: 'RobotoSlab-VariableFont_wght',
+    borderBottomWidth: 1,
+    padding: 8,
+    borderBottomColor: theme.colors.primary,
   },
 });
