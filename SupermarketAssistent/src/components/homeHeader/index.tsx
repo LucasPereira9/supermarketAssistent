@@ -23,7 +23,7 @@ export default function HomeHeader() {
         <Image
           resizeMode="contain"
           style={styles.clientPhoto}
-          source={require('../../assets/smallLogo.png')}
+          source={require('../../assets/homeLogo.png')}
         />
         <TouchableOpacity
           onPress={() => navigation.navigate('history')}

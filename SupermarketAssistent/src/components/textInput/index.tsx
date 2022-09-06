@@ -19,7 +19,7 @@ export default function InputText({
       <TextInput
         style={{
           borderBottomWidth: 1,
-          borderBottomColor: theme.colors.primary,
+          borderBottomColor: theme.colors.tertiary,
           textAlign: 'center',
           bottom: 6,
           width: '100%',

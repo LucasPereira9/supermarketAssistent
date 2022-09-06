@@ -85,6 +85,7 @@ export default function Home() {
       const data = [NewItem, ...previousItens];
 
       await setItem(JSON.stringify(data));
+      console.log('resultado', result.length);
 
       result = '0';
       setUnity('');
@@ -189,7 +190,7 @@ export default function Home() {
             style={{padding: 4}}
             name="search"
             size={20}
-            color={theme.colors.primary}
+            color={theme.colors.tertiary}
           />
           <TextInput
             style={{color: '#000'}}
@@ -439,7 +440,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: theme.colors.primary,
+    borderColor: theme.colors.tertiary,
     height: '80%',
     top: 4,
     left: 12,

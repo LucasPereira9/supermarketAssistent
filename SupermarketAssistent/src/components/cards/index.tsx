@@ -79,11 +79,11 @@ export function Card({data, onPress, onEdit}: Props) {
         </View>
 
         <TouchableOpacity style={{top: '2%', right: '67%'}} onPress={onEdit}>
-          <Icon name="edit" size={24} color={theme.colors.primary} />
+          <Icon name="edit" size={24} color={theme.colors.tertiary} />
         </TouchableOpacity>
 
         <TouchableOpacity style={{top: '2%', right: '27%'}} onPress={onPress}>
-          <Icon name="trash-2" size={24} color={theme.colors.primary} />
+          <Icon name="trash-2" size={24} color={theme.colors.tertiary} />
         </TouchableOpacity>
       </View>
     </View>
