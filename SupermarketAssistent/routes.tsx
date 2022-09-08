@@ -57,7 +57,7 @@ export default function Routes() {
             style={{width: '75%'}}
             source={require('./src//assets/animations/animated_Splash.json')}
             autoPlay
-            loop={true}
+            loop={false}
           />
         </View>
       )}
