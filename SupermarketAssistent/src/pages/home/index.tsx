@@ -54,6 +54,7 @@ export default function Home() {
   const multiply = Number(value) * Number(amount);
   const fixed = parseFloat(String(multiply));
   let result = String(fixed).substr(0, 5);
+  const newTotal = total.toLocaleString().replace('.', ',');
 
   const showToast = () => {
     console.log('works');
@@ -62,7 +63,6 @@ export default function Home() {
       text1: 'Compra Salva com sucesso!',
     });
   };
-
   const searchName = (input: string) => {
     let data = itensContainer;
     let searchData = data.filter(item => {
@@ -158,14 +158,14 @@ export default function Home() {
       for (var i = 0; i < data.length; i++) {
         number = number += parseFloat(data[i]);
         const transform = number.toString();
-        const result = transform.substr(0, 6);
+        const result2 = transform.substr(0, 6);
         const decimalResult = transform.substr(0, 5);
 
         if (transform.length < 4) {
           setTotal(Number(decimalResult));
         }
         if (transform.length > 4) {
-          setTotal(Number(result));
+          setTotal(Number(result2));
         }
       }
     } catch (error) {
@@ -372,7 +372,7 @@ export default function Home() {
       )}
       {emptyBag ? null : (
         <TabContainer
-          Total={total}
+          Total={newTotal}
           bag={emptyBag}
           setModal={() => (emptyBag ? null : setClearModal(true))}
           setSaveModal={() => (emptyBag ? null : setOpenedSaveModal(true))}

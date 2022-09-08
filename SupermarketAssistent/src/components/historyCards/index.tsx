@@ -33,7 +33,8 @@ export function HistoryCard({data, onPress}: Props) {
         ]}>
         <View style={styles.littleContainers}>
           <Text style={styles.text}>
-            <Text style={{fontWeight: 'bold'}}>Valor:</Text> R$ {data.value}
+            <Text style={{fontWeight: 'bold'}}>Valor:</Text> R${' '}
+            {data.value.toLocaleString().replace('.', ',')}
           </Text>
           <Text style={styles.text}>
             <Text style={{fontWeight: 'bold'}}>Data:</Text> {data.date}

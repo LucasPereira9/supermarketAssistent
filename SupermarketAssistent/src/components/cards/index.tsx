@@ -74,7 +74,9 @@ export function Card({data, onPress, onEdit}: Props) {
               padding: 10,
               width: '30%',
             }}
-            textContent={String(`R$ ${data.value}`)}
+            textContent={String(
+              `R$ ${data.value.toLocaleString().replace('.', ',')}`,
+            )}
           />
         </View>
 
