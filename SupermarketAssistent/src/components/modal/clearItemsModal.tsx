@@ -30,18 +30,11 @@ const ClearModal = ({
         <View
           style={{
             width: '100%',
-            minHeight: success ? '30%' : '20%',
+            minHeight: success ? '30%' : '18%',
             backgroundColor: theme.colors.primary,
             borderRadius: 10,
           }}>
-          {loading ? (
-            <View style={styles.lottieViews}>
-              <LottieView
-                source={require('../../assets/animations/shopping-cart.json')}
-                autoPlay
-              />
-            </View>
-          ) : success ? (
+          {success ? (
             <View style={styles.lottieViews}>
               <LottieView
                 style={{width: '60%', bottom: 20}}
@@ -55,24 +48,38 @@ const ClearModal = ({
               />
               <MyAppText
                 styling={styles.successText}
-                textContent="Encontrou algum bug? entra em contato comigo clicando na imagem abaixo! valeuuu =)"
+                textContent="Encontrou algum bug? entre em contato comigo abaixo! valeuuu =)"
               />
-              <TouchableOpacity
-                style={styles.linkImage}
-                onPress={() => {
-                  Linking.openURL(
-                    'https://www.linkedin.com/in/lucas-pereira-5280b9206/',
-                  );
-                }}>
-                <Image
-                  style={[styles.linkImage, {bottom: 1}]}
-                  source={require('../../assets/Lucas_bit.png')}
-                />
-              </TouchableOpacity>
+              <View style={styles.socialMidiaContainer}>
+                <TouchableOpacity
+                  style={styles.imageContainer}
+                  onPress={() => {
+                    Linking.openURL('https://www.instagram.com/_lucas__09/');
+                  }}>
+                  <Image
+                    style={[styles.linkImage]}
+                    source={require('../../assets/instagram.png')}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.imageContainer}
+                  onPress={() => {
+                    Linking.openURL(
+                      'https://www.linkedin.com/in/lucas-pereira-5280b9206/',
+                    );
+                  }}>
+                  <Image
+                    style={[styles.linkImage]}
+                    source={require('../../assets/linkedIn.png')}
+                  />
+                </TouchableOpacity>
+              </View>
+
               <TouchableOpacity
                 style={[styles.button, {bottom: 20}]}
                 onPress={() => {
                   onPressOut();
+                  setSuccess(false);
                 }}>
                 <MyAppText styling={''} textContent="Voltar" />
               </TouchableOpacity>
@@ -98,10 +105,18 @@ const ClearModal = ({
                       setSuccess(true);
                       setLoading(false);
                       onPressDelete();
-                    }, 6200);
+                    }, 3000);
                   }}
                   style={styles.button}>
-                  <MyAppText styling={''} textContent="Prosseguir" />
+                  {loading ? (
+                    <LottieView
+                      style={{width: '90%'}}
+                      source={require('../../assets/animations/insiderLoading.json')}
+                      autoPlay
+                    />
+                  ) : (
+                    <MyAppText styling={''} textContent="Prosseguir" />
+                  )}
                 </TouchableOpacity>
               </View>
             </>
@@ -133,9 +148,17 @@ const styles = StyleSheet.create({
     bottom: 84,
   },
   linkImage: {
-    width: 90,
-    height: 80,
-    borderRadius: 62,
-    bottom: 55,
+    width: 40,
+    height: 40,
+    margin: 10,
+  },
+  socialMidiaContainer: {
+    flexDirection: 'row',
+  },
+  imageContainer: {
+    bottom: 50,
+    margin: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.secundary,
   },
 });

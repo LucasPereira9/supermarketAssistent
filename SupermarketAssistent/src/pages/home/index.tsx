@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   StatusBar,
@@ -46,8 +46,7 @@ export default function Home() {
   const [savedComment, setSavedComment] = useState('');
 
   const emptyBag = itemsInTheBag === 0;
-  const empty =
-    unity === '' || value === '' || value.length < 5 || amount === '';
+  const empty = unity === '' || value === '' || amount === '';
 
   const {getItem, setItem, removeItem} = useAsyncStorage(
     '@supermarketAssistent',
@@ -86,6 +85,7 @@ export default function Home() {
       const data = [NewItem, ...previousItens];
 
       await setItem(JSON.stringify(data));
+      console.log('resultado', result.length);
 
       result = '0';
       setUnity('');
@@ -190,7 +190,7 @@ export default function Home() {
             style={{padding: 4}}
             name="search"
             size={20}
-            color={theme.colors.primary}
+            color={theme.colors.tertiary}
           />
           <TextInput
             style={{color: '#000'}}
@@ -293,7 +293,7 @@ export default function Home() {
             </SelectValue>
             <TouchableOpacity
               style={{
-                left: '98%',
+                left: '94%',
                 position: 'absolute',
                 height: '82%',
               }}
@@ -370,12 +370,15 @@ export default function Home() {
           )}
         />
       )}
-      <TabContainer
-        Total={total}
-        bag={emptyBag}
-        setModal={() => (emptyBag ? null : setClearModal(true))}
-        setSaveModal={() => (emptyBag ? null : setOpenedSaveModal(true))}
-      />
+      {emptyBag ? null : (
+        <TabContainer
+          Total={total}
+          bag={emptyBag}
+          setModal={() => (emptyBag ? null : setClearModal(true))}
+          setSaveModal={() => (emptyBag ? null : setOpenedSaveModal(true))}
+        />
+      )}
+
       <ClearModal
         visible={clearmodal}
         onPressOut={() => {
@@ -417,7 +420,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#fff',
     borderRadius: 4,
-    padding: 1.8,
+    padding: 3,
   },
   moreItensButton: {
     width: 120,
@@ -437,7 +440,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: theme.colors.primary,
+    borderColor: theme.colors.tertiary,
     height: '80%',
     top: 4,
     left: 12,

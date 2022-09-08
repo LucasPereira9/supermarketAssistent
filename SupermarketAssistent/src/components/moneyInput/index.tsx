@@ -19,7 +19,7 @@ export default function MoneyInput({
         style={{
           width: '15%',
           borderBottomWidth: 1,
-          borderBottomColor: theme.colors.primary,
+          borderBottomColor: theme.colors.tertiary,
           textAlign: 'center',
           bottom: 6,
           right: 6,

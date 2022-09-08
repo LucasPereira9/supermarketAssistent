@@ -1,31 +1,39 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ToastAndroid,
+} from 'react-native';
 import theme from '../../global/styles/theme';
 import MyAppText from '../myAppText/text';
+import Icon from 'react-native-vector-icons/Feather';
 
 export default function HomeHeader() {
   const navigation = useNavigation();
+
+  function showToast() {
+    ToastAndroid.show('Botão em manutenção!', ToastAndroid.BOTTOM);
+  }
   return (
     <>
       <View style={styles.Header}>
         <Image
           resizeMode="contain"
           style={styles.clientPhoto}
-          source={require('../../assets/Lucas_bit.png')}
+          source={require('../../assets/homeLogo.png')}
         />
-        <MyAppText
-          styling={styles.headerText}
-          textContent={'LISTA \n DE \n COMPRAS'}
-        />
-      </View>
-      <View>
         <TouchableOpacity
           onPress={() => navigation.navigate('history')}
           style={styles.historyButton}>
           <MyAppText styling={''} textContent="Histórico de compras" />
         </TouchableOpacity>
       </View>
+      <TouchableOpacity onPress={showToast} style={styles.configButton}>
+        <Icon name="settings" size={26} color={theme.colors.secundary} />
+      </TouchableOpacity>
     </>
   );
 }
@@ -33,34 +41,28 @@ export default function HomeHeader() {
 const styles = StyleSheet.create({
   Header: {
     width: '100%',
-    height: '24%',
+    height: '26%',
     backgroundColor: theme.colors.primary,
     justifyContent: 'space-around',
     alignItems: 'center',
     padding: '10%',
-    flexDirection: 'row',
   },
   clientPhoto: {
-    width: '26%',
-    height: '84%',
-    borderWidth: 1,
-    borderColor: theme.colors.secundary,
-  },
-  headerText: {
-    minHeight: '50%',
-    fontSize: 21,
-    color: '#fff',
-    textAlign: 'center',
+    right: '10%',
+    width: '100%',
+    height: '100%',
+    top: 22,
   },
   historyButton: {
-    position: 'absolute',
-    bottom: 1,
-    left: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
     borderRadius: 4,
     backgroundColor: theme.colors.secundary,
-    width: '40%',
-    margin: 10,
+    width: '50%',
+    left: '33%',
+    top: 20,
+  },
+  configButton: {
+    position: 'absolute',
+    top: '6%',
+    left: '88%',
   },
 });
