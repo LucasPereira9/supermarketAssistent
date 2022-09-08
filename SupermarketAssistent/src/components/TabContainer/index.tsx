@@ -10,7 +10,7 @@ export default function TabContainer({
   setModal,
   setSaveModal,
 }: {
-  Total: number;
+  Total: string;
   bag: boolean;
   setModal: () => void;
   setSaveModal: () => void;
