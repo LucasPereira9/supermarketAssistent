@@ -57,7 +57,6 @@ export default function Home() {
   const newTotal = total.toLocaleString().replace('.', ',');
 
   const showToast = () => {
-    console.log('works');
     Toast.show({
       type: 'success',
       text1: 'Compra Salva com sucesso!',
@@ -85,7 +84,6 @@ export default function Home() {
       const data = [NewItem, ...previousItens];
 
       await setItem(JSON.stringify(data));
-      console.log('resultado', result.length);
 
       result = '0';
       setUnity('');
