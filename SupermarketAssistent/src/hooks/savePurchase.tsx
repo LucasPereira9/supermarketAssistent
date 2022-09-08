@@ -14,9 +14,15 @@ export async function SavePurchase({
   const {getItem, setItem} = useAsyncStorage('@supermarketHistory');
   try {
     const id = uuid();
+    let today = new Date();
     const NewItem = {
       id,
-      date: new Date().toLocaleDateString(),
+      date:
+        today.getDate() +
+        '/' +
+        parseInt(today.getMonth() + 1, 10) +
+        '/' +
+        today.getFullYear(),
       time: new Date().toLocaleTimeString(),
       value: Total,
       Comment,
