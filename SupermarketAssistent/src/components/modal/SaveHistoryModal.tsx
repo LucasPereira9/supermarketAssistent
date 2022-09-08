@@ -59,7 +59,10 @@ const SaveModal = ({
               color: '#fff',
               fontSize: 20,
             }}
-            textContent={`Valor da compra R$ ${TotalValue}`}
+            textContent={`Valor da compra R$ ${TotalValue.toLocaleString().replace(
+              '.',
+              ',',
+            )}`}
           />
 
           <TextInput
