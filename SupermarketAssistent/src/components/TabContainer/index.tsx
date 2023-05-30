@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#fff',
     textAlign: 'center',
-    fontFamily: 'RobotoSlab-VariableFont_wght',
+    // fontFamily: 'RobotoSlab-VariableFont_wght',
   },
   clean: {
     width: '34%',

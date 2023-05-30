@@ -261,7 +261,7 @@ export default function Home() {
                       backgroundColor: selectedValue
                         ? theme.colors.primary
                         : theme.colors.secundary,
-                      fontFamily: 'RobotoSlab-VariableFont_wght',
+                      // fontFamily: 'RobotoSlab-VariableFont_wght',
                     },
                   ]}>
                   Unitário {'\n'} {changePrice ? null : value}
@@ -282,7 +282,7 @@ export default function Home() {
                       backgroundColor: selectedValue
                         ? theme.colors.secundary
                         : theme.colors.primary,
-                      fontFamily: 'RobotoSlab-VariableFont_wght',
+                      // fontFamily: 'RobotoSlab-VariableFont_wght',
                     },
                   ]}>
                   Multiplicado {'\n'} {changePrice ? value : result}
@@ -404,7 +404,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#fff',
     textAlign: 'center',
-    fontFamily: 'RobotoSlab-VariableFont_wght',
+    // fontFamily: 'RobotoSlab-VariableFont_wght',
   },
 
   CardView: {

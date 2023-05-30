@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#000',
-    fontFamily: 'RobotoSlab-VariableFont_wght',
+    // fontFamily: 'RobotoSlab-VariableFont_wght',
     borderBottomWidth: 1,
     padding: 8,
     borderBottomColor: theme.colors.primary,
