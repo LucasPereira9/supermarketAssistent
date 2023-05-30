@@ -9,15 +9,7 @@ const MyAppText = ({
   textContent: string;
   styling: any;
 }) => {
-  return (
-    <Text
-      style={[
-        styling,
-        {fontFamily: 'RobotoSlab-VariableFont_wght', textAlign: 'center'},
-      ]}>
-      {textContent}
-    </Text>
-  );
+  return <Text style={[styling, {textAlign: 'center'}]}>{textContent}</Text>;
 };
 
 export default MyAppText;
